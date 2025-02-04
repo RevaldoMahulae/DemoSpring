@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d352bbc8-77a9-44fa-8ef7-e459b3bf26c1" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/dao/UserDao.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/dao/impl/UserDaoImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/service/UserService2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/demo/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/META-INF/maven/com.example/demo/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/META-INF/maven/com.example/demo/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/DemoApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/DemoApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/controller/UserController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/model/User.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/model/User.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/repository/UserRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/repository/UserRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/service/UserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/service/UserService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/com/example/demo/util/ResponseWrapper.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/classes/com/example/demo/util/ResponseWrapper.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/test-classes/com/example/demo/DemoApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/demo/target/test-classes/com/example/demo/DemoApplicationTests.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="2sZJMDAdV5Eh8cPMEa2hnsKSV48" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pathVariables",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "postgresql"
+    ]
+  }
+}]]></component>
+  <component name="RunManager">
+    <configuration name="DemoApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="demo" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.example.demo.DemoApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d352bbc8-77a9-44fa-8ef7-e459b3bf26c1" name="Changes" comment="" />
+      <created>1738657112898</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1738657112898</updated>
+      <workItem from="1738657114089" duration="3936000" />
+      <workItem from="1738661391979" duration="662000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>
