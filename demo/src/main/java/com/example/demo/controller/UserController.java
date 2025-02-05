@@ -27,8 +27,11 @@ public class UserController {
 		return ResponseEntity.ok(response);
 	}
 
-	@PostMapping
-	public void createUser(@RequestBody User user) {
-		userService.saveUser(user);
+	@PostMapping("/create")
+	public ResponseEntity<Object> createUser(@RequestBody User user) {
+		System.out.println("Received POST request to /users/create");
+		User saveUser = userService.saveUser(user);
+		return ResponseEntity.ok(saveUser);
 	}
+
 }
