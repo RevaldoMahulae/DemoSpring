@@ -10,7 +10,9 @@ public class User {
 	private Long id;
 	private String name;
 	private String email;
-	
+
+	private Integer nik;
+
 	public User() {}
 	
 	public User(String name, String email) {
@@ -42,6 +44,13 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
+
+
+	public Integer getNik() {
+		return nik;
+	}
+
+	public void setNik(Integer nik) {
+		this.nik = nik;
+	}
 }
