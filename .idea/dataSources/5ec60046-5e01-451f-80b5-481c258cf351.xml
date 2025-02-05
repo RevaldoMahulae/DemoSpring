@@ -3,9 +3,9 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.49">
     <root id="1">
       <DateStyle>dmy</DateStyle>
-      <IntrospectionStateNumber>18761</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18766</IntrospectionStateNumber>
       <ServerVersion>16.1</ServerVersion>
-      <StartupTime>1738632779</StartupTime>
+      <StartupTime>1738666873</StartupTime>
       <TimeZones>true ACDT
 true ACSST
 false ACST
@@ -801,7 +801,6 @@ false Zulu
 14697||10|C|G
 14697||-9223372036854775808|U|G
 14697||10|U|G</Grants>
-      <IntrospectionStateNumber>18753</IntrospectionStateNumber>
       <ObjectId>5</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -819,7 +818,7 @@ false Zulu
 14697||10|C|G
 14697||-9223372036854775808|U|G
 14697||10|U|G</Grants>
-      <IntrospectionStateNumber>18761</IntrospectionStateNumber>
+      <IntrospectionStateNumber>18766</IntrospectionStateNumber>
       <ObjectId>133153</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -4252,7 +4251,6 @@ false Zulu
     <schema id="266" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>18753</IntrospectionStateNumber>
       <IntrospectionTimestamp>2025-02-04.16:29:04.639</IntrospectionTimestamp>
       <LocalIntrospectionTimestamp>2025-02-04.09:29:05</LocalIntrospectionTimestamp>
       <ObjectId>2200</ObjectId>
@@ -7610,45 +7608,59 @@ false Zulu
     <schema id="510" parent="4" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>18761</IntrospectionStateNumber>
-      <IntrospectionTimestamp>2025-02-04.16:29:16.676</IntrospectionTimestamp>
-      <LocalIntrospectionTimestamp>2025-02-04.09:29:16</LocalIntrospectionTimestamp>
+      <IntrospectionStateNumber>18766</IntrospectionStateNumber>
+      <IntrospectionTimestamp>2025-02-05.00:35:35.508</IntrospectionTimestamp>
+      <LocalIntrospectionTimestamp>2025-02-04.17:35:35</LocalIntrospectionTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>524</StateNumber>
       <OwnerName>pg_database_owner</OwnerName>
     </schema>
-    <table id="511" parent="510" name="user">
+    <sequence id="511" parent="510" name="users_id_seq">
+      <DasType>bigint|0s</DasType>
+      <ObjectId>133159</ObjectId>
+      <SequenceIdentity>1(1)</SequenceIdentity>
+      <StartValue>1</StartValue>
+      <StateNumber>18762</StateNumber>
+      <OwnerName>postgres</OwnerName>
+    </sequence>
+    <table id="512" parent="510" name="user">
       <ObjectId>133154</ObjectId>
       <StateNumber>18737</StateNumber>
       <AccessMethodId>2</AccessMethodId>
       <OwnerName>postgres</OwnerName>
     </table>
-    <column id="512" parent="511" name="id">
+    <table id="513" parent="510" name="users">
+      <ObjectId>133160</ObjectId>
+      <StateNumber>18762</StateNumber>
+      <AccessMethodId>2</AccessMethodId>
+      <OwnerName>postgres</OwnerName>
+    </table>
+    <column id="514" parent="512" name="id">
       <DasType>integer|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
       <StateNumber>18737</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="513" parent="511" name="name">
+    <column id="515" parent="512" name="name">
       <DasType>char(100)|0s</DasType>
       <Position>2</Position>
       <StateNumber>18737</StateNumber>
       <TypeId>1042</TypeId>
     </column>
-    <column id="514" parent="511" name="nik">
+    <column id="516" parent="512" name="nik">
       <DasType>integer|0s</DasType>
       <Position>3</Position>
       <StateNumber>18737</StateNumber>
       <TypeId>23</TypeId>
     </column>
-    <column id="515" parent="511" name="email">
+    <column id="517" parent="512" name="email">
       <DasType>char(100)|0s</DasType>
       <Position>4</Position>
       <StateNumber>18737</StateNumber>
       <TypeId>1042</TypeId>
     </column>
-    <index id="516" parent="511" name="user_pkey">
+    <index id="518" parent="512" name="user_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>133157</ObjectId>
@@ -7657,12 +7669,49 @@ false Zulu
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
     </index>
-    <key id="517" parent="511" name="user_pkey">
+    <key id="519" parent="512" name="user_pkey">
       <NameSurrogate>1</NameSurrogate>
       <ObjectId>133158</ObjectId>
       <Primary>1</Primary>
       <StateNumber>18737</StateNumber>
       <UnderlyingIndexId>133157</UnderlyingIndexId>
+    </key>
+    <column id="520" parent="513" name="id">
+      <DasType>bigint|0s</DasType>
+      <IdentityKind>by-default</IdentityKind>
+      <NotNull>1</NotNull>
+      <Position>1</Position>
+      <StateNumber>18762</StateNumber>
+      <SequenceId>133159</SequenceId>
+      <TypeId>20</TypeId>
+    </column>
+    <column id="521" parent="513" name="email">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>2</Position>
+      <StateNumber>18762</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <column id="522" parent="513" name="name">
+      <DasType>varchar(255)|0s</DasType>
+      <Position>3</Position>
+      <StateNumber>18762</StateNumber>
+      <TypeId>1043</TypeId>
+    </column>
+    <index id="523" parent="513" name="users_pkey">
+      <ColNames>id</ColNames>
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>133165</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>18762</StateNumber>
+      <Unique>1</Unique>
+      <AccessMethodId>403</AccessMethodId>
+    </index>
+    <key id="524" parent="513" name="users_pkey">
+      <NameSurrogate>1</NameSurrogate>
+      <ObjectId>133166</ObjectId>
+      <Primary>1</Primary>
+      <StateNumber>18762</StateNumber>
+      <UnderlyingIndexId>133165</UnderlyingIndexId>
     </key>
   </database-model>
 </dataSource>
