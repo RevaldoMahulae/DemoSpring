@@ -33,11 +33,13 @@ public class UserController {
 
 	@GetMapping
 	public ResponseEntity<List<User>> getAllUsers() {
+		List<User> users = userService.getAllUsers();
 		return ResponseEntity.ok(users);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ResponseWrapper> getUserById(@PathVariable Long id) {
+		ResponseWrapper response = userService.findUserById(id);
 		return ResponseEntity.ok(response);
 	}
 
@@ -48,13 +50,15 @@ public class UserController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
+	public ResponseEntity<ResponseWrapper> updateUser(@PathVariable Long id, @RequestBody User user) {
+		ResponseWrapper updatedUser = userService.updateUser(id, user);
 		return ResponseEntity.ok(updatedUser);
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable Long id) {
+		ResponseWrapper response = userService.deleteUser(id);
+		return ResponseEntity.ok(response);
 	}
 
 }

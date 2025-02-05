@@ -17,20 +17,20 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserDao userDao;
 
-//    @Override
-//    public List<User> getAllUsers() {
-//        return userDao.getAllUsers();
-//    }
-//
-//    @Override
-//    public ResponseWrapper findUserById(Long id) {
-//        User user = userDao.findUserById(id);
-//        if (user != null) {
-//            return new ResponseWrapper(1, user.getName() + " info retrieved successfully", user);
-//        } else {
-//            return new ResponseWrapper(0, "User with ID " + id + " not found", null);
-//        }
-//    }
+    @Override
+    public List<User> getAllUsers() {
+        return userDao.getAllUsers();
+    }
+
+    @Override
+    public ResponseWrapper findUserById(Long id) {
+        User user = userDao.findUserById(id);
+        if (user != null) {
+            return new ResponseWrapper(1, user.getName() + " info retrieved successfully", user);
+        } else {
+            return new ResponseWrapper(0, "User with ID " + id + " not found", null);
+        }
+    }
 
     @Override
     public User saveUser(User user) {
@@ -42,4 +42,24 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Error creating user", e);
         }
     }
+
+	@Override
+	public ResponseWrapper updateUser(Long id, User updatedUser) {
+		User user = userDao.updateUser(id, updatedUser);
+	    if (user != null) {
+	        return new ResponseWrapper(1, user.getName() + " updated successfully", user);
+	    } else {
+	        return new ResponseWrapper(0, "User with ID " + id + " not found", null);
+	    }
+	}
+
+	@Override
+	public ResponseWrapper deleteUser(Long id) {
+		 boolean isDeleted = userDao.deleteUser(id);
+		    if (isDeleted) {
+		        return new ResponseWrapper(1, "User with ID " + id + " deleted successfully", null);
+		    } else {
+		        return new ResponseWrapper(0, "User with ID " + id + " not found", null);
+		    }
+	}
 }

@@ -3,6 +3,9 @@ package com.example.demo.dao.impl;
 import java.util.List;
 
 import com.example.demo.dao.UserDao;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,8 +20,8 @@ import com.example.demo.model.User;
 @Transactional
 public class UserDaoImpl implements UserDao {
 
-//    @PersistenceContext
-//    private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
     private final SessionFactory sessionFactory;
 
@@ -28,25 +31,15 @@ public class UserDaoImpl implements UserDao {
         this.sessionFactory = sessionFactory;
     }
 
-//    @Override
-//    public List<User> getAllUsers() {
-//        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
-//    }
-//
-//    @Override
-//    public User findUserById(Long id) {
-//        return entityManager.find(User.class, id);
-//    }
+    @Override
+    public List<User> getAllUsers() {
+        return entityManager.createQuery("SELECT u FROM User u", User.class).getResultList();
+    }
 
-//    @Override
-//    public List<User> getAllUsers() {
-//        return null;
-//    }
-//
-//    @Override
-//    public User findUserById(Long id) {
-//        return null;
-//    }
+    @Override
+    public User findUserById(Long id) {
+        return entityManager.find(User.class, id);
+    }
 
     @Override
     public User saveUser(User user) {
@@ -74,4 +67,49 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
+	@Override
+	public User updateUser(Long id, User updatedUser) {
+		Transaction tx = null;
+		try (Session session = sessionFactory.openSession()) {
+			tx = session.beginTransaction();
+	        
+	        User existingUser = session.get(User.class, id);
+	        if (existingUser != null) {
+	            existingUser.setName(updatedUser.getName());
+	            existingUser.setEmail(updatedUser.getEmail());
+	            existingUser.setNik(updatedUser.getNik());
+	            
+	            session.update(existingUser);
+	            tx.commit();
+	            return existingUser;
+	        }
+	        return null;
+		}catch (Exception e) {
+	        if (tx != null) {
+	            tx.rollback();
+	        }
+	        throw new DataAccessResourceFailureException("Error updating user", e);
+	    }
+	}
+
+	@Override
+	public Boolean deleteUser(Long id) {
+	    Transaction tx = null;
+	    try (Session session = sessionFactory.openSession()) {
+	        tx = session.beginTransaction();
+	        
+	        User user = session.get(User.class, id);
+	        if (user != null) {
+	            session.delete(user);
+	            tx.commit();
+	            return true;
+	        }
+	        return false;
+	    } catch (Exception e) {
+	        if (tx != null) {
+	            tx.rollback();
+	        }
+	        throw new DataAccessResourceFailureException("Error deleting user", e);
+	    }
+	}
 }

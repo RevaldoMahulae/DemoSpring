@@ -10,15 +10,14 @@ public class User {
 	private Long id;
 	private String name;
 	private String email;
-
 	private Integer nik;
 
 	public User() {}
 	
-	public User(String name, String email) {
-		super();
-		this.name = name;
-		this.email = email;
+	public User(String name, String email, Integer nik) {
+	    this.name = name;
+	    this.email = email;
+	    this.nik = nik;
 	}
 
 	public Long getId() {
