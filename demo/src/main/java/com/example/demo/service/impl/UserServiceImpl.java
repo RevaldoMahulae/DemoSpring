@@ -3,7 +3,9 @@ package com.example.demo.service.impl;
 import java.util.List;
 
 import com.example.demo.service.UserService;
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import com.example.demo.dao.UserDao;
 import com.example.demo.model.User;
@@ -31,7 +33,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(User user) {
-        userDao.saveUser(user);
+    public User saveUser(User user) {
+        try{
+            return userDao.saveUser(user);
+        } catch (DataAccessException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new ServiceException("Error creating user", e);
+        }
     }
 }
