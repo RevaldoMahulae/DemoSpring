@@ -6,8 +6,8 @@ import com.example.demo.util.ResponseWrapper;
 import com.example.demo.model.User;
 
 public interface UserService {
-    List<User> getAllUsers();
-    ResponseWrapper findUserById(Long id);
+//    List<User> getAllUsers();
+//    ResponseWrapper findUserById(Long id);
 
     User saveUser(User user);
 }

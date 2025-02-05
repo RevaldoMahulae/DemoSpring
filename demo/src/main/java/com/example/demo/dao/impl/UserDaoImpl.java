@@ -38,15 +38,15 @@ public class UserDaoImpl implements UserDao {
 //        return entityManager.find(User.class, id);
 //    }
 
-    @Override
-    public List<User> getAllUsers() {
-        return null;
-    }
-
-    @Override
-    public User findUserById(Long id) {
-        return null;
-    }
+//    @Override
+//    public List<User> getAllUsers() {
+//        return null;
+//    }
+//
+//    @Override
+//    public User findUserById(Long id) {
+//        return null;
+//    }
 
     @Override
     public User saveUser(User user) {
@@ -54,7 +54,7 @@ public class UserDaoImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             tx = session.beginTransaction();
 
-            // INSERT USER DATA USING RAW SQL
+
             String insertQuerySQL = "INSERT INTO users (name, nik, email) VALUES (:name, :nik, :email)";
 
             NativeQuery insertQuery = session.createNativeQuery(insertQuerySQL);
@@ -62,10 +62,10 @@ public class UserDaoImpl implements UserDao {
             insertQuery.setParameter("nik", user.getNik());
             insertQuery.setParameter("email", user.getEmail());
 
-            insertQuery.executeUpdate();  // EXECUTE THE QUERY
+            insertQuery.executeUpdate();
 
-            tx.commit();  // COMMIT AFTER EXECUTION
-            return user;  // RETURN THE USER OBJECT
+            tx.commit();
+            return user;
         } catch (Exception e) {
             if (tx != null) {
                 tx.rollback();
