@@ -23,19 +23,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseWrapper findUserById(Long id) {
-        User user = userDao.findUserById(id);
-        if (user != null) {
-            return new ResponseWrapper(1, user.getName() + " info retrieved successfully", user);
-        } else {
-            return new ResponseWrapper(0, "User with ID " + id + " not found", null);
-        }
+    public User findUserById(Long id) {
+        return userDao.findUserById(id);
     }
-
+    
     @Override
-    public User saveUser(User user) {
+    public User saveUser(User user, List<Long> roleIds, List<Long> divisionIds) {
         try{
-            return userDao.saveUser(user);
+            return userDao.saveUser(user, roleIds, divisionIds);
         } catch (DataAccessException e) {
             throw e;
         } catch (Exception e) {
@@ -61,5 +56,15 @@ public class UserServiceImpl implements UserService {
 		    } else {
 		        return new ResponseWrapper(0, "User with ID " + id + " not found", null);
 		    }
+	}
+
+	@Override
+	public List<String> getUserRoles(Long userId) {
+	    return userDao.getUserRoles(userId);
+	}
+
+	@Override
+	public List<String> getUserDivisions(Long userId) {
+	    return userDao.getUserDivisions(userId);
 	}
 }

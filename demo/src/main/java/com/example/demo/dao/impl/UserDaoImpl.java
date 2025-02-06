@@ -14,6 +14,9 @@ import org.hibernate.query.NativeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
+
+import com.example.demo.model.Division;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 
 @Repository
@@ -42,74 +45,91 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User saveUser(User user) {
-        Transaction tx = null;
-        try (Session session = sessionFactory.openSession()) {
-            tx = session.beginTransaction();
+    public User saveUser(User user, List<Long> roleIds, List<Long> divisionIds) {
+        entityManager.persist(user);
+        entityManager.flush();
 
+        Long userId = user.getId();
 
-            String insertQuerySQL = "INSERT INTO users (name, nik, email) VALUES (:name, :nik, :email)";
+        for (Long roleId : roleIds) {
+            entityManager.createQuery("INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)")
+                    .setParameter(1, userId)
+                    .setParameter(2, roleId)
+                    .executeUpdate();
+        }
 
-            NativeQuery insertQuery = session.createNativeQuery(insertQuerySQL);
-            insertQuery.setParameter("name", user.getName());
-            insertQuery.setParameter("nik", user.getNik());
-            insertQuery.setParameter("email", user.getEmail());
+        for (Long divisionId : divisionIds) {
+            entityManager.createQuery("INSERT INTO user_divisions (user_id, division_id) VALUES (?, ?)")
+                    .setParameter(1, userId)
+                    .setParameter(2, divisionId)
+                    .executeUpdate();
+        }
 
-            insertQuery.executeUpdate();
+        return user;
+    }
 
-            tx.commit();
-            return user;
-        } catch (Exception e) {
-            if (tx != null) {
-                tx.rollback();
+    @Override
+    public User updateUser(Long id, User updatedUser) {
+        try {
+            int updatedRows = entityManager.createQuery(
+                    "UPDATE users SET name = ?, email = ?, nik = ? WHERE id = ?")
+                    .setParameter(1, updatedUser.getName())
+                    .setParameter(2, updatedUser.getEmail())
+                    .setParameter(3, updatedUser.getNik())
+                    .setParameter(4, id)
+                    .executeUpdate();
+
+            if (updatedRows > 0) {
+                return findUserById(id);
             }
-            throw new DataAccessResourceFailureException("Error creating user", e);
+            return null;
+        } catch (Exception e) {
+            throw new DataAccessResourceFailureException("Error updating user", e);
         }
     }
 
-	@Override
-	public User updateUser(Long id, User updatedUser) {
-		Transaction tx = null;
-		try (Session session = sessionFactory.openSession()) {
-			tx = session.beginTransaction();
-	        
-	        User existingUser = session.get(User.class, id);
-	        if (existingUser != null) {
-	            existingUser.setName(updatedUser.getName());
-	            existingUser.setEmail(updatedUser.getEmail());
-	            existingUser.setNik(updatedUser.getNik());
-	            
-	            session.update(existingUser);
-	            tx.commit();
-	            return existingUser;
-	        }
-	        return null;
-		}catch (Exception e) {
-	        if (tx != null) {
-	            tx.rollback();
-	        }
-	        throw new DataAccessResourceFailureException("Error updating user", e);
-	    }
-	}
 
-	@Override
-	public Boolean deleteUser(Long id) {
-	    Transaction tx = null;
-	    try (Session session = sessionFactory.openSession()) {
-	        tx = session.beginTransaction();
-	        
-	        User user = session.get(User.class, id);
-	        if (user != null) {
-	            session.delete(user);
-	            tx.commit();
-	            return true;
-	        }
-	        return false;
-	    } catch (Exception e) {
-	        if (tx != null) {
-	            tx.rollback();
-	        }
-	        throw new DataAccessResourceFailureException("Error deleting user", e);
-	    }
-	}
+    @Override
+    public Boolean deleteUser(Long id) {
+        try {
+            int deletedRows = entityManager.createQuery(
+                    "DELETE FROM users WHERE id = ?")
+                    .setParameter(1, id)
+                    .executeUpdate();
+
+            return deletedRows > 0;
+        } catch (Exception e) {
+            throw new DataAccessResourceFailureException("Error deleting user", e);
+        }
+    }
+
+    @Override
+    public List<String> getUserRoles(Long userId) {
+        return entityManager.createNativeQuery(
+                "SELECT r.role_name FROM roles r " +
+                "JOIN user_roles ur ON r.id = ur.role_id " +
+                "WHERE ur.user_id = ?")
+            .setParameter(1, userId)
+            .getResultList()
+            .stream()
+            .map(Object::toString)  
+            .toList(); 
+    }
+
+    @Override
+    public List<String> getUserDivisions(Long userId) {
+        return entityManager.createNativeQuery(
+                "SELECT d.division_name FROM divisions d " +
+                "JOIN user_divisions ud ON d.id = ud.division_id " +
+                "WHERE ud.user_id = ?")
+            .setParameter(1, userId)
+            .getResultList()
+            .stream()
+            .map(Object::toString)  
+            .toList(); 
+    }
+
+
+
+
 }

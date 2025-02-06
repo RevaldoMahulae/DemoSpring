@@ -7,8 +7,10 @@ import com.example.demo.model.User;
 
 public interface UserService {
     List<User> getAllUsers();
-    ResponseWrapper findUserById(Long id);
-    User saveUser(User user);
+    User findUserById(Long id);
+    User saveUser(User user, List<Long> roleIds, List<Long> divisionIds);
     ResponseWrapper updateUser(Long id, User updatedUser);
     ResponseWrapper deleteUser(Long id);
+    List<String> getUserRoles(Long userId);
+    List<String> getUserDivisions(Long userId);
 }

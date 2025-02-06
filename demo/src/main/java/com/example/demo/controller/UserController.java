@@ -1,6 +1,9 @@
 package com.example.demo.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,15 +42,36 @@ public class UserController {
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ResponseWrapper> getUserById(@PathVariable Long id) {
-		ResponseWrapper response = userService.findUserById(id);
-		return ResponseEntity.ok(response);
+	    User user = userService.findUserById(id);
+	    
+	    if (user != null) {
+	        List<String> roles = userService.getUserRoles(id);
+	        List<String> divisions = userService.getUserDivisions(id);
+	        
+	        String rolesStr = String.join(",", roles);
+	        String divisionsStr = String.join(",", divisions);
+	        
+	        Map<String, Object> responseData = new HashMap<>();
+	        responseData.put("name", user.getName());
+	        responseData.put("role", rolesStr);
+	        responseData.put("division", divisionsStr);
+	        
+	        ResponseWrapper response = new ResponseWrapper(1, user.getName() + " info retrieved successfully", responseData);
+	        return ResponseEntity.ok(response);
+	    } else {
+	        return ResponseEntity.ok(new ResponseWrapper(0, "User not found", null));
+	    }
 	}
 
-	@PostMapping("/create")
-	public ResponseEntity<Object> createUser(@RequestBody User user) {
-		User saveUser = userService.saveUser(user);
-		return ResponseEntity.ok(saveUser);
-	}
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(
+            @RequestBody User user,
+            @RequestParam List<Long> roleIds,
+            @RequestParam List<Long> divisionIds) {
+
+        User savedUser = userService.saveUser(user, roleIds, divisionIds);
+        return ResponseEntity.ok(savedUser);
+    }
 
 	@PutMapping("/{id}")
 	public ResponseEntity<ResponseWrapper> updateUser(@PathVariable Long id, @RequestBody User user) {
