@@ -9,8 +9,8 @@ public interface UserService {
     List<User> getAllUsers();
     User findUserById(Long id);
     User saveUser(User user, List<Long> roleIds, List<Long> divisionIds);
-    ResponseWrapper updateUser(Long id, User updatedUser);
-    ResponseWrapper deleteUser(Long id);
+    User updateUser(Long id, User updatedUser);
+    boolean deleteUser(Long id);
     List<String> getUserRoles(Long userId);
     List<String> getUserDivisions(Long userId);
 }
