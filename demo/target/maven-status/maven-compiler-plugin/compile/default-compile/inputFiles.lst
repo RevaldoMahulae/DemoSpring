@@ -1,9 +1,16 @@
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\controller\EmailController.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\controller\UserController.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\dao\impl\UserDaoImpl.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\dao\UserDao.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\DemoApplication.java
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\model\Division.java
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\model\Role.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\model\User.java
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\model\UserDivision.java
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\model\UserRole.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\repository\UserRepository.java
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\service\EmailService.java
+F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\service\impl\EmailServiceImpl.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\service\impl\UserServiceImpl.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\service\UserService.java
 F:\Kerjaan\DemoSpring\demo\src\main\java\com\example\demo\service\UserService2.java
