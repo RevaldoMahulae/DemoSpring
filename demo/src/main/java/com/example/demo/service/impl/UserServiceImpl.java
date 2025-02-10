@@ -1,8 +1,12 @@
 package com.example.demo.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import com.example.demo.service.UserService;
+
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -28,13 +32,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User saveUser(User user, List<Long> roleIds, List<Long> divisionIds) {
         try {
+            System.out.println("Saving user with DOB: " + user.getDob()); // Debugging
             return userDao.saveUser(user, roleIds, divisionIds);
         } catch (DataAccessException e) {
-            throw e; 
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Error creating user", e);
         }
     }
+
 
     @Override
     public User updateUser(Long id, User updatedUser) {

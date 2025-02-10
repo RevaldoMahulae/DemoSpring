@@ -2,13 +2,18 @@ package com.example.demo.dao.impl;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.example.demo.dao.UserDao;
 import com.example.demo.model.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.exception.DataException;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Repository;
 
@@ -25,39 +30,33 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         try (Session session = sessionFactory.openSession()) {
-            List<Object[]> results = session.createNativeQuery(
-                "SELECT id, name, email, nik FROM users").getResultList();
+            String queryString = "SELECT id, name, email, nik, dob FROM users";
             
-            List<User> users = new ArrayList<>();
-            for (Object[] row : results) {
-                User user = new User();
-                user.setId(((Number) row[0]).longValue());
-                user.setName((String) row[1]);
-                user.setEmail((String) row[2]);
-                user.setNik(((Number) row[3]).intValue());
-                users.add(user);
-            }
+            NativeQuery<User> sqlQuery = session.createNativeQuery(queryString)
+            		.setTupleTransformer(Transformers.aliasToBean(User.class));
+            
+            List<User> users = sqlQuery.getResultList();
             return users;
+        }catch(Exception e) {
+        	throw new DataAccessException("Error fetching all users", e){
+			};
         }
     }
 
     @Override
     public User findUserById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-            Object[] result = (Object[]) session.createNativeQuery(
-                "SELECT id, name, email, nik FROM users WHERE id = :id")
-                .setParameter("id", id)
-                .uniqueResult();
-            
-            if (result != null) {
-                User user = new User();
-                user.setId(((Number) result[0]).longValue());
-                user.setName((String) result[1]);
-                user.setEmail((String) result[2]);
-                user.setNik(((Number) result[3]).intValue());
-                return user;
-            }
-            return null;
+        	String queryString = "SELECT id, name, email, nik, dob FROM users WHERE id = :id";
+        	
+        	NativeQuery<User> sqlQuery = session.createNativeQuery(queryString)
+        			.setParameter("id", id)
+        			.setTupleTransformer(Transformers.aliasToBean(User.class));
+        	
+            User user = sqlQuery.uniqueResult();
+            return user;
+        }catch(Exception e) {
+        	throw new DataAccessException("Error fetching data", e){
+			};
         }
     }
 
@@ -67,19 +66,19 @@ public class UserDaoImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
-            int insertedRows = session.createNativeQuery(
-                "INSERT INTO users (name, email, nik) VALUES (:name, :email, :nik)")
-                .setParameter("name", user.getName())
-                .setParameter("email", user.getEmail())
-                .setParameter("nik", user.getNik())
-                .executeUpdate();
+            Long userId = ((Number) session.createNativeQuery(
+                    "INSERT INTO users (name, email, nik, dob) VALUES (:name, :email, :nik, :dob) RETURNING id")
+                    .setParameter("name", user.getName())
+                    .setParameter("email", user.getEmail())
+                    .setParameter("nik", user.getNik())
+                    .setParameter("dob", user.getDob())
+                    .uniqueResult())
+                    .longValue();
 
-            if (insertedRows == 0) {
-                throw new RuntimeException("User not inserted");
+            if (userId == null) {
+                throw new RuntimeException("User ID not generated");
             }
 
-            Long userId = ((Number) session.createNativeQuery("SELECT LAST_INSERT_ID()")
-                    .uniqueResult()).longValue();
 
             for (Long roleId : roleIds) {
                 session.createNativeQuery("INSERT INTO user_roles (user_id, role_id) VALUES (:userId, :roleId)")

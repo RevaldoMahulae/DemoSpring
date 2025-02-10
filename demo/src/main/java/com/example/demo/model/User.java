@@ -1,5 +1,9 @@
 package com.example.demo.model;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,13 +15,18 @@ public class User {
 	private String name;
 	private String email;
 	private Integer nik;
+	
+    @Temporal(TemporalType.DATE)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date dob;
 
 	public User() {}
 	
-	public User(String name, String email, Integer nik) {
+	public User(String name, String email, Integer nik, Date dob) {
 	    this.name = name;
 	    this.email = email;
 	    this.nik = nik;
+	    this.dob = dob;
 	}
 
 	public Long getId() {
@@ -52,4 +61,14 @@ public class User {
 	public void setNik(Integer nik) {
 		this.nik = nik;
 	}
+
+	public Date getDob() {
+		return dob;
+	}
+
+	public void setDob(Date dob) {
+		this.dob = dob;
+	}
+	
+	
 }
