@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,62 +32,97 @@ public class UserController {
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
         User user = userService.findUserById(id);
         if (user == null) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(404).body("User tidak ditemukan");
         }
-
-        List<String> roles = userService.getUserRoles(id);
-        List<String> divisions = userService.getUserDivisions(id);
-
-        Map<String, Object> responseData = new HashMap<>();
-        responseData.put("id", user.getId());
-        responseData.put("name", user.getName());
-        responseData.put("email", user.getEmail());
-        responseData.put("nik", user.getNik());
-        responseData.put("dob", user.getDob());
-        responseData.put("role", String.join(",", roles));
-        responseData.put("division", String.join(",", divisions));
-
-        return ResponseEntity.ok(responseData);
+        return ResponseEntity.ok(userService.getUserDetails(id));
     }
 
     @PostMapping("/create")
-    public ResponseEntity<User> createUser(@RequestBody Map<String, Object> requestData) {
+    public ResponseEntity<?> createUser(@RequestBody Map<String, Object> requestData) {
         try {
             String name = requestData.get("name").toString();
             String email = requestData.get("email").toString();
             Integer nik = Integer.parseInt(requestData.get("nik").toString());
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date dob = null;
-
             if (requestData.get("dob") != null) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dateFormat.setLenient(false);
                 try {
                     dob = dateFormat.parse(requestData.get("dob").toString());
                 } catch (ParseException e) {
-                    return ResponseEntity.badRequest().body(null);
+                    return ResponseEntity.badRequest().body("Format tanggal lahir (dob) harus yyyy-MM-dd.");
                 }
             }
+            
+            List<Long> roleIds = ((List<?>) requestData.get("roleIds"))
+                                .stream()
+                                .map(o -> Long.parseLong(o.toString()))
+                                .toList();
 
-            List<Long> roleIds = (List<Long>) requestData.get("roleIds");
-            List<Long> divisionIds = (List<Long>) requestData.get("divisionIds");
+            List<Long> divisionIds = ((List<?>) requestData.get("divisionIds"))
+                                    .stream()
+                                    .map(o -> Long.parseLong(o.toString()))
+                                    .toList();
 
             User user = new User(name, email, nik, dob);
             User savedUser = userService.saveUser(user, roleIds, divisionIds);
 
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Gagal save ser");
+        }
+    }
+
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateUser(
+        @PathVariable Long id,
+        @RequestBody Map<String, Object> requestBody) {
+        
+        try {
+            User user = new User();
+            user.setName((String) requestBody.get("name"));
+            user.setEmail((String) requestBody.get("email"));
+            
+            Object nikObj = requestBody.get("nik");
+            Integer nik = (nikObj instanceof Number) ? ((Number) nikObj).intValue() : Integer.parseInt(nikObj.toString());
+            user.setNik(nik);
+            
+            if (requestBody.get("dob") != null) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                dateFormat.setLenient(false);
+                try {
+                    user.setDob(dateFormat.parse((String) requestBody.get("dob")));
+                } catch (ParseException e) {
+                    return ResponseEntity.badRequest().body("Format tanggal lahir (dob) harus yyyy-MM-dd.");
+                }
+            }
+
+            
+            
+
+            List<Long> roleIds = ((List<?>) requestBody.get("roleIds"))
+                                .stream()
+                                .map(o -> Long.valueOf(o.toString()))
+                                .collect(Collectors.toList());
+
+            List<Long> divisionIds = ((List<?>) requestBody.get("divisionIds"))
+                                    .stream()
+                                    .map(o -> Long.valueOf(o.toString()))
+                                    .collect(Collectors.toList());
+
+            User updatedUser = userService.updateUser(id, user, roleIds, divisionIds);
+
+            if (updatedUser == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User user) {
-    	User updatedUser = userService.updateUser(id, user);
-        if (updatedUser == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(updatedUser);
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {

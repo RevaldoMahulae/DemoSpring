@@ -104,18 +104,41 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User updateUser(Long id, User updatedUser) {
+    public User updateUser(Long id, User updatedUser, List<Long> roleIds, List<Long> divisionIds) {
         Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             int updatedRows = session.createNativeQuery(
-                    "UPDATE users SET name = :name, email = :email, nik = :nik WHERE id = :id")
+                    "UPDATE users SET name = :name, email = :email, nik = :nik, dob = :dob WHERE id = :id")
                     .setParameter("name", updatedUser.getName())
                     .setParameter("email", updatedUser.getEmail())
                     .setParameter("nik", updatedUser.getNik())
+                    .setParameter("dob", updatedUser.getDob())
                     .setParameter("id", id)
                     .executeUpdate();
+
+            session.createNativeQuery("DELETE FROM user_roles WHERE user_id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            for (Long roleId : roleIds) {
+                session.createNativeQuery("INSERT INTO user_roles (user_id, role_id) VALUES (:userId, :roleId)")
+                        .setParameter("userId", id)
+                        .setParameter("roleId", roleId)
+                        .executeUpdate();
+            }
+
+            session.createNativeQuery("DELETE FROM user_divisions WHERE user_id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            for (Long divisionId : divisionIds) {
+                session.createNativeQuery("INSERT INTO user_divisions (user_id, division_id) VALUES (:userId, :divisionId)")
+                        .setParameter("userId", id)
+                        .setParameter("divisionId", divisionId)
+                        .executeUpdate();
+            }
 
             transaction.commit();
 
@@ -128,6 +151,7 @@ public class UserDaoImpl implements UserDao {
             throw new DataAccessResourceFailureException("Error updating user", e);
         }
     }
+
 
     @Override
     public Boolean deleteUser(Long id) {

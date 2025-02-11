@@ -2,7 +2,9 @@ package com.example.demo.service.impl;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.example.demo.service.UserService;
 
@@ -28,11 +30,34 @@ public class UserServiceImpl implements UserService {
     public User findUserById(Long id) {
         return userDao.findUserById(id);
     }
+    
+    @Override
+    public Map<String, Object> getUserDetails(Long id) {
+        User user = findUserById(id);
+        if (user == null) {
+            return null;
+        }
+
+        List<String> roles = getUserRoles(id);
+        List<String> divisions = getUserDivisions(id);
+
+
+        Map<String, Object> responseData = new HashMap<>();
+        responseData.put("id", user.getId());
+        responseData.put("name", user.getName());
+        responseData.put("email", user.getEmail());
+        responseData.put("nik", user.getNik());
+        responseData.put("dob", user.getDob());
+        responseData.put("role", String.join(",", roles));
+        responseData.put("division", String.join(",", divisions));
+
+        return responseData;
+    }
+
 
     @Override
     public User saveUser(User user, List<Long> roleIds, List<Long> divisionIds) {
         try {
-            System.out.println("Saving user with DOB: " + user.getDob()); // Debugging
             return userDao.saveUser(user, roleIds, divisionIds);
         } catch (DataAccessException e) {
             throw e;
@@ -43,8 +68,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User updateUser(Long id, User updatedUser) {
-        User user = userDao.updateUser(id, updatedUser);
+    public User updateUser(Long id, User updatedUser, List<Long> roleIds, List<Long> divisionIds) {
+        User user = userDao.updateUser(id, updatedUser, roleIds, divisionIds);
         if (user == null) {
             throw new RuntimeException("User with ID " + id + " not found");
         }
