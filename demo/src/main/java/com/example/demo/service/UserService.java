@@ -18,4 +18,5 @@ public interface UserService {
     List<String> getUserRoles(Long userId);
     List<String> getUserDivisions(Long userId);
 	Map<String, Object> getUserDetails(Long id);
+	boolean restoreUser(Long id);
 }

@@ -31,7 +31,9 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers(String sortBy, Sort.Direction direction) {
         try (Session session = sessionFactory.openSession()) {
-            String queryString = "SELECT id, name, email, nik, dob FROM users ORDER BY " + sortBy + " " + direction.name();
+            String queryString = "SELECT id, name, email, nik, dob "
+            					+ "FROM users WHERE is_deleted = false ORDER BY " 
+            					+ sortBy + " " + direction.name();
             
             NativeQuery<User> sqlQuery = session.createNativeQuery(queryString)
             		.setTupleTransformer(Transformers.aliasToBean(User.class));
@@ -153,24 +155,22 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-
+    
     @Override
     public Boolean deleteUser(Long id) {
-        Transaction transaction = null;
         try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
+            Transaction transaction = session.beginTransaction();
 
-            int deletedRows = session.createNativeQuery("DELETE FROM users WHERE id = :id")
+            int updatedRows = session.createQuery("UPDATE User SET isDeleted = true WHERE id = :id")
                     .setParameter("id", id)
                     .executeUpdate();
 
             transaction.commit();
-            return deletedRows > 0;
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            throw new DataAccessResourceFailureException("Error deleting user", e);
+            return updatedRows > 0;
         }
     }
+
+
 
     @Override
     public List<String> getUserRoles(Long userId) {
@@ -195,4 +195,19 @@ public class UserDaoImpl implements UserDao {
                 .getResultList();
         }
     }
+    
+    @Override
+    public boolean restoreUser(Long id) {
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            int updatedRows = session.createQuery("UPDATE User SET isDeleted = false WHERE id = :id")
+                    .setParameter("id", id)
+                    .executeUpdate();
+
+            transaction.commit();
+            return updatedRows > 0;
+        }
+    }
+
 }

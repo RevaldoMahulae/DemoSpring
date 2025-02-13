@@ -137,4 +137,14 @@ public class UserController {
         }
         return ResponseEntity.ok("User with ID " + id + " deleted successfully");
     }
+    
+    @PutMapping("/restore/{id}")
+    public ResponseEntity<String> restoreUser(@PathVariable Long id) {
+        boolean isRestored = userService.restoreUser(id);
+        if (!isRestored) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok("User with ID " + id + " restored successfully");
+    }
+
 }

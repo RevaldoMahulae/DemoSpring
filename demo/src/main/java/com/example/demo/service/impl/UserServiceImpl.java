@@ -8,6 +8,8 @@ import java.util.Map;
 
 import com.example.demo.service.UserService;
 
+import jakarta.transaction.Transactional;
+
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -17,6 +19,7 @@ import com.example.demo.dao.UserDao;
 import com.example.demo.model.User;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -91,4 +94,10 @@ public class UserServiceImpl implements UserService {
     public List<String> getUserDivisions(Long userId) {
         return userDao.getUserDivisions(userId);
     }
+    
+    @Override
+    public boolean restoreUser(Long id) {
+        return userDao.restoreUser(id);
+    }
+
 }

@@ -19,14 +19,20 @@ public class User {
     @Temporal(TemporalType.DATE)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date dob;
+    
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
-	public User() {}
+	public User() {
+		this.isDeleted = false;
+	}
 	
 	public User(String name, String email, Integer nik, Date dob) {
 	    this.name = name;
 	    this.email = email;
 	    this.nik = nik;
 	    this.dob = dob;
+	    this.isDeleted = false;
 	}
 
 	public Long getId() {
@@ -70,5 +76,11 @@ public class User {
 		this.dob = dob;
 	}
 	
-	
+		public boolean isDeleted() {
+		return isDeleted;
+	}
+
+	public void setDeleted(boolean isDeleted) {
+		this.isDeleted = isDeleted;
+	}
 }

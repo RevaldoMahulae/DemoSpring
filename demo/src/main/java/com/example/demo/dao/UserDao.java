@@ -14,4 +14,5 @@ public interface UserDao {
     Boolean deleteUser(Long id);
     List<String> getUserRoles(Long userId);
     List<String> getUserDivisions(Long userId);
+	boolean restoreUser(Long id);
 }
