@@ -15,6 +15,7 @@ import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,9 +29,9 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers() {
+    public List<User> getAllUsers(String sortBy, Sort.Direction direction) {
         try (Session session = sessionFactory.openSession()) {
-            String queryString = "SELECT id, name, email, nik, dob FROM users";
+            String queryString = "SELECT id, name, email, nik, dob FROM users ORDER BY " + sortBy + " " + direction.name();
             
             NativeQuery<User> sqlQuery = session.createNativeQuery(queryString)
             		.setTupleTransformer(Transformers.aliasToBean(User.class));

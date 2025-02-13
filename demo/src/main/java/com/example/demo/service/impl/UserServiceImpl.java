@@ -11,6 +11,7 @@ import com.example.demo.service.UserService;
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import com.example.demo.dao.UserDao;
 import com.example.demo.model.User;
@@ -22,8 +23,8 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    public List<User> getAllUsers() {
-        return userDao.getAllUsers();
+    public List<User> getAllUsers(String sortBy, Sort.Direction direction) {
+        return userDao.getAllUsers(sortBy, direction);
     }
 
     @Override
