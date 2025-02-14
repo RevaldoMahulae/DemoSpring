@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.model.User;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.UserService;
+
+import jakarta.mail.MessagingException;
 
 @RestController
 @RequestMapping("/users")
@@ -22,6 +25,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(
@@ -59,28 +65,50 @@ public class UserController {
                     return ResponseEntity.badRequest().body("Format tanggal lahir (dob) harus yyyy-MM-dd.");
                 }
             }
-            
+
             List<Long> roleIds = ((List<?>) requestData.get("roleIds"))
-                                .stream()
-                                .map(o -> Long.parseLong(o.toString()))
-                                .toList();
+                    .stream()
+                    .map(o -> Long.parseLong(o.toString()))
+                    .toList();
 
             List<Long> divisionIds = ((List<?>) requestData.get("divisionIds"))
-                                    .stream()
-                                    .map(o -> Long.parseLong(o.toString()))
-                                    .toList();
+                    .stream()
+                    .map(o -> Long.parseLong(o.toString()))
+                    .toList();
 
             User user = new User(name, email, nik, dob);
             User savedUser = userService.saveUser(user, roleIds, divisionIds);
 
+            String hrdEmail = "email@qualitas.co.id";
+            String subject = "User Baru Telah Dibuat";
+            String body = generateEmailContent(savedUser);
+
+            emailService.sendUserCreationEmail(email, hrdEmail, subject, body);
+
             return ResponseEntity.ok(savedUser);
+        } catch (MessagingException e) {
+            return ResponseEntity.badRequest().body("User berhasil dibuat, tetapi email gagal dikirim.");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Gagal save ser");
+            return ResponseEntity.badRequest().body("Gagal save User");
         }
     }
 
 
-    @PutMapping("/update/{id}")
+    private String generateEmailContent(User user) {
+        return "<html>" +
+                "<body>" +
+                "<h2>Data User Baru</h2>" +
+                "<p><strong>Nama:</strong> " + user.getName() + "</p>" +
+                "<p><strong>Email:</strong> " + user.getEmail() + "</p>" +
+                "<p><strong>NIK:</strong> " + user.getNik() + "</p>" +
+                "<p><strong>Tanggal Lahir:</strong> " + user.getDob() + "</p>" +
+                "<br>" +
+                "<p>Terima kasih.</p>" +
+                "</body>" +
+                "</html>";
+    }
+
+	@PutMapping("/update/{id}")
     public ResponseEntity<?> updateUser(
         @PathVariable Long id,
         @RequestBody Map<String, Object> requestBody) {
