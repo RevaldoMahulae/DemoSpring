@@ -22,7 +22,7 @@ public class EmailServiceImpl implements EmailService {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-        helper.setFrom("revaldo.mahulae@qualitas.co.id");
+        helper.setFrom("email@qualitas.co.id");
         helper.setCc(userEmail);
         helper.setTo(hrdEmail); 
         helper.setSubject(subject);

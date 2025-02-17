@@ -6,6 +6,8 @@ import java.util.Date;
 
 import com.example.demo.dao.UserDao;
 import com.example.demo.model.User;
+import com.example.demo.util.Constants;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,35 +33,20 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers(String sortBy, Sort.Direction direction) {
         try (Session session = sessionFactory.openSession()) {
-            String queryString = "SELECT id, name, email, nik, dob "
-            					+ "FROM users WHERE is_deleted = false ORDER BY " 
-            					+ sortBy + " " + direction.name();
-            
+            String queryString = String.format(Constants.QUERY_GET_ALL_USERS, sortBy, direction.name());
             NativeQuery<User> sqlQuery = session.createNativeQuery(queryString)
-            		.setTupleTransformer(Transformers.aliasToBean(User.class));
-            
-            List<User> users = sqlQuery.getResultList();
-            return users;
-        }catch(Exception e) {
-        	throw new DataAccessException("Error fetching all users", e){
-			};
+                    .setTupleTransformer(Transformers.aliasToBean(User.class));
+            return sqlQuery.getResultList();
         }
     }
 
     @Override
     public User findUserById(Long id) {
         try (Session session = sessionFactory.openSession()) {
-        	String queryString = "SELECT id, name, email, nik, dob FROM users WHERE id = :id";
-        	
-        	NativeQuery<User> sqlQuery = session.createNativeQuery(queryString)
-        			.setParameter("id", id)
-        			.setTupleTransformer(Transformers.aliasToBean(User.class));
-        	
-            User user = sqlQuery.uniqueResult();
-            return user;
-        }catch(Exception e) {
-        	throw new DataAccessException("Error fetching data", e){
-			};
+            NativeQuery<User> sqlQuery = session.createNativeQuery(Constants.QUERY_FIND_USER_BY_ID)
+                    .setParameter(Constants.PARAM_ID, id)
+                    .setTupleTransformer(Transformers.aliasToBean(User.class));
+            return sqlQuery.uniqueResult();
         }
     }
 
@@ -69,40 +56,30 @@ public class UserDaoImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
-            Long userId = ((Number) session.createNativeQuery(
-                    "INSERT INTO users (name, email, nik, dob) VALUES (:name, :email, :nik, :dob) RETURNING id")
-                    .setParameter("name", user.getName())
-                    .setParameter("email", user.getEmail())
-                    .setParameter("nik", user.getNik())
-                    .setParameter("dob", user.getDob())
-                    .uniqueResult())
-                    .longValue();
-
-            if (userId == null) {
-                throw new RuntimeException("User ID not generated");
-            }
-
+            Long userId = ((Number) session.createNativeQuery(Constants.QUERY_INSERT_USER)
+                    .setParameter(Constants.PARAM_NAME, user.getName())
+                    .setParameter(Constants.PARAM_EMAIL, user.getEmail())
+                    .setParameter(Constants.PARAM_NIK, user.getNik())
+                    .setParameter(Constants.PARAM_DOB, user.getDob())
+                    .uniqueResult()).longValue();
 
             for (Long roleId : roleIds) {
-                session.createNativeQuery("INSERT INTO user_roles (user_id, role_id) VALUES (:userId, :roleId)")
-                        .setParameter("userId", userId)
-                        .setParameter("roleId", roleId)
+                session.createNativeQuery(Constants.QUERY_INSERT_USER_ROLE)
+                        .setParameter(Constants.PARAM_USER_ID, userId)
+                        .setParameter(Constants.PARAM_ROLE_ID, roleId)
                         .executeUpdate();
             }
 
             for (Long divisionId : divisionIds) {
-                session.createNativeQuery("INSERT INTO user_divisions (user_id, division_id) VALUES (:userId, :divisionId)")
-                        .setParameter("userId", userId)
-                        .setParameter("divisionId", divisionId)
+                session.createNativeQuery(Constants.QUERY_INSERT_USER_DIVISION)
+                        .setParameter(Constants.PARAM_USER_ID, userId)
+                        .setParameter(Constants.PARAM_DIVISION_ID, divisionId)
                         .executeUpdate();
             }
 
             transaction.commit();
             user.setId(userId);
             return user;
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-            throw new DataAccessResourceFailureException("Error saving user", e);
         }
     }
 
@@ -112,34 +89,33 @@ public class UserDaoImpl implements UserDao {
         try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
-            int updatedRows = session.createNativeQuery(
-                    "UPDATE users SET name = :name, email = :email, nik = :nik, dob = :dob WHERE id = :id")
-                    .setParameter("name", updatedUser.getName())
-                    .setParameter("email", updatedUser.getEmail())
-                    .setParameter("nik", updatedUser.getNik())
-                    .setParameter("dob", updatedUser.getDob())
-                    .setParameter("id", id)
+            int updatedRows = session.createNativeQuery(Constants.QUERY_UPDATE_USER)
+                    .setParameter(Constants.PARAM_NAME, updatedUser.getName())
+                    .setParameter(Constants.PARAM_EMAIL, updatedUser.getEmail())
+                    .setParameter(Constants.PARAM_NIK, updatedUser.getNik())
+                    .setParameter(Constants.PARAM_DOB, updatedUser.getDob())
+                    .setParameter(Constants.PARAM_ID, id)
                     .executeUpdate();
 
-            session.createNativeQuery("DELETE FROM user_roles WHERE user_id = :id")
-                    .setParameter("id", id)
+            session.createNativeQuery(Constants.QUERY_DELETE_USER_ROLE)
+                    .setParameter(Constants.PARAM_ID, id)
                     .executeUpdate();
 
             for (Long roleId : roleIds) {
-                session.createNativeQuery("INSERT INTO user_roles (user_id, role_id) VALUES (:userId, :roleId)")
-                        .setParameter("userId", id)
-                        .setParameter("roleId", roleId)
+                session.createNativeQuery(Constants.QUERY_INSERT_USER_ROLE)
+                        .setParameter(Constants.PARAM_USER_ID, id)
+                        .setParameter(Constants.PARAM_ROLE_ID, roleId)
                         .executeUpdate();
             }
 
-            session.createNativeQuery("DELETE FROM user_divisions WHERE user_id = :id")
-                    .setParameter("id", id)
+            session.createNativeQuery(Constants.QUERY_DELETE_USER_DIVISION)
+                    .setParameter(Constants.PARAM_ID, id)
                     .executeUpdate();
 
             for (Long divisionId : divisionIds) {
-                session.createNativeQuery("INSERT INTO user_divisions (user_id, division_id) VALUES (:userId, :divisionId)")
-                        .setParameter("userId", id)
-                        .setParameter("divisionId", divisionId)
+                session.createNativeQuery(Constants.QUERY_INSERT_USER_DIVISION)
+                        .setParameter(Constants.PARAM_USER_ID, id)
+                        .setParameter(Constants.PARAM_DIVISION_ID, divisionId)
                         .executeUpdate();
             }
 
@@ -151,18 +127,17 @@ public class UserDaoImpl implements UserDao {
             return null;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
-            throw new DataAccessResourceFailureException("Error updating user", e);
+            throw new DataAccessResourceFailureException(Constants.ERROR_UPDATING_USER, e);
         }
     }
 
-    
     @Override
     public Boolean deleteUser(Long id) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
 
-            int updatedRows = session.createQuery("UPDATE User SET isDeleted = true WHERE id = :id")
-                    .setParameter("id", id)
+            int updatedRows = session.createQuery(Constants.QUERY_SOFT_DELETE_USER)
+                    .setParameter(Constants.PARAM_ID, id)
                     .executeUpdate();
 
             transaction.commit();
@@ -170,16 +145,11 @@ public class UserDaoImpl implements UserDao {
         }
     }
 
-
-
     @Override
     public List<String> getUserRoles(Long userId) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createNativeQuery(
-                    "SELECT r.role_name FROM roles r " +
-                    "JOIN user_roles ur ON r.id = ur.role_id " +
-                    "WHERE ur.user_id = :userId")
-                .setParameter("userId", userId)
+            return session.createNativeQuery(Constants.QUERY_GET_USER_ROLES)
+                .setParameter(Constants.PARAM_USER_ID, userId)
                 .getResultList();
         }
     }
@@ -187,22 +157,19 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<String> getUserDivisions(Long userId) {
         try (Session session = sessionFactory.openSession()) {
-            return session.createNativeQuery(
-                    "SELECT d.division_name FROM divisions d " +
-                    "JOIN user_divisions ud ON d.id = ud.division_id " +
-                    "WHERE ud.user_id = :userId")
-                .setParameter("userId", userId)
+            return session.createNativeQuery(Constants.QUERY_GET_USER_DIVISIONS)
+                .setParameter(Constants.PARAM_USER_ID, userId)
                 .getResultList();
         }
     }
-    
+
     @Override
     public boolean restoreUser(Long id) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
 
-            int updatedRows = session.createQuery("UPDATE User SET isDeleted = false WHERE id = :id")
-                    .setParameter("id", id)
+            int updatedRows = session.createQuery(Constants.QUERY_RESTORE_USER)
+                    .setParameter(Constants.PARAM_ID, id)
                     .executeUpdate();
 
             transaction.commit();
