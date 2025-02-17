@@ -1,0 +1,232 @@
+<div>
+    <form ng-submit="vm.save()">
+        <dialog id="dialog-create-skillset" class="card">
+            <div class="card-header">
+                <h3 class="card-header_title" ng-bind="vm.dialogTitle"></h3>
+            </div>
+            <div class="card-content">
+                <div class="card-form-inputs__horizontal">
+                    <div
+                            class="card-form-input__layout-horizontal"
+                            ng-hide="vm.mode == 'c'"
+                    >
+                        <label for="id">ID</label>
+                        <input
+                                id="id"
+                                type="text"
+                                class="input"
+                                ng-model="vm.selectedItem.id"
+                                disabled
+                        />
+                    </div>
+                    <div class="card-form-input__layout-horizontal">
+                        <label for="name">Skill Set</label>
+                        <input
+                                id="name"
+                                type="text"
+                                placeholder="Write name"
+                                class="input"
+                                ng-disabled="vm.mode == 'v'"
+                                ng-model="vm.selectedItem.name"
+                        />
+                    </div>
+                    <div class="card-form-input__layout-horizontal">
+                        <label>Priority</label>
+                        <div class="radio-items-component">
+                            <label class="text-sm center-horizontal">
+                                <input
+                                        type="radio"
+                                        name="option"
+                                        class="radio-input"
+                                        ng-disabled="vm.mode == 'v'"
+                                        ng-model="vm.selectedItem.priority"
+                                        ng-value="1"
+                                />Yes
+                            </label>
+                            <label class="text-sm center-horizontal">
+                                <input
+                                        type="radio"
+                                        name="option"
+                                        class="radio-input"
+                                        ng-disabled="vm.mode == 'v'"
+                                        ng-model="vm.selectedItem.priority"
+                                        ng-value="0"
+                                />No
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer--end">
+                <button
+                        type="button"
+                        class="btn btn--outline"
+                        ng-click="vm.closeDialog(vm.dialogs.create)"
+                >
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn--primary" ng-if="vm.mode !== 'v'">
+                    Save
+                </button>
+            </div>
+        </dialog>
+    </form>
+
+    <form ng-submit="vm.deleteItem()">
+        <dialog id="dialog-delete-skillset" class="card">
+            <div class="card-header">
+                <h3 class="card-header_title">
+                    Delete <span ng-bind="vm.menuName"></span>
+                </h3>
+            </div>
+            <div class="card-content">
+                <p>
+                    Are you sure you want to delete <span ng-bind="vm.menuName"></span>
+                    <strong ng-bind="vm.selectedItem.name"></strong>? <br />
+                    This action cannot be undone.
+                </p>
+            </div>
+            <div class="card-footer--end">
+                <button
+                        type="button"
+                        class="btn btn--secondary btn--no-background"
+                        ng-click="vm.closeDialog(vm.dialogs.delete)"
+                >
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn--destructive">Delete</button>
+            </div>
+        </dialog>
+    </form>
+
+    <div class="card card--transparent card--no-shadow table-component">
+        <div class="card-header">
+            <div class="header-create-container">
+                <h3 ng-bind="vm.menuName"></h3>
+
+                <button
+                        class="btn btn--primary btn--rounded"
+                        ng-click="vm.showDialog(vm.dialogs.create, 'c')"
+                >
+                    Create
+                </button>
+            </div>
+            <p class="muted">Here's a list of our data</p>
+        </div>
+
+        <div class="card-content">
+            <div class="table-border">
+                <div class="table-container">
+                    <form ng-submit="vm.search($event)">
+                        <table class="table-bordered">
+                            <caption></caption>
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Priority</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr class="table-filter-row">
+                                <th class="min-width-10rem">
+                                    <input
+                                            type="text"
+                                            placeholder="Search ID"
+                                            class="input"
+                                            ng-model="vm.filters.id"
+                                    />
+                                </th>
+                                <th>
+                                    <input
+                                            type="text"
+                                            placeholder="Search Name"
+                                            class="input"
+                                            ng-model="vm.filters.name"
+                                    />
+                                </th>
+                                <th>
+                                    <div class="dropdown-component">
+                                        <i
+                                                class="bx rotate-icon bxs-chevron-down"
+                                                ng-class="{rotate: vm.isFocused}"
+                                        ></i>
+                                        <select
+                                                name="filter-priority"
+                                                class="input"
+                                                ng-focus="vm.onFocus(true)"
+                                                ng-blur="vm.onFocus(false)"
+                                                ng-model="vm.filters.priority"
+                                                ng-options="option.value as option.label for option in vm.priorityOptions"
+                                        ></select>
+                                    </div>
+                                </th>
+                                <th>
+                                    <div class="table-row-action">
+                                        <clear-button on-click="vm.clearFilter();"></clear-button>
+
+                                        <search-button></search-button>
+                                    </div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr
+                                    dir-paginate="item in vm.items | itemsPerPage: vm.pagination.itemsPerPage"
+                                    current-page="vm.pagination.currentPage"
+                                    total-items="vm.pagination.totalItems"
+                            >
+                                <td ng-bind="item.id"></td>
+                                <td class="font-medium" ng-bind="item.name"></td>
+                                <td>
+                    <span
+                            class="chip"
+                            ng-style="vm.getChipStyle(item.priority)"
+                            ng-bind="item.priority == 1 ? 'Yes' : 'No'"
+                    ></span>
+                                </td>
+                                <td>
+                                    <div class="table-row-action">
+                                        <detail-button
+                                                ng-click="vm.showDialog(vm.dialogs.create, 'v', item)"
+                                        ></detail-button>
+                                        <edit-button
+                                                ng-click="vm.showDialog(vm.dialogs.create, 'e', item)"
+                                        ></edit-button>
+                                        <delete-button
+                                                ng-click="vm.showDialog(vm.dialogs.delete, 'd', item)"
+                                        ></delete-button>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+            <!-- Empty State -->
+            <div
+                    class="empty-state-container"
+                    ng-if="!dataLoading && !vm.items.length"
+            >
+                <div class="empty-state-icon">
+                    <img src="/app/assets/images/ic-empty-state.svg" alt="No Data Icon" />
+                </div>
+                <div class="empty-state-message">No Results Found</div>
+                <div class="empty-state-alt-message">
+                    There was nothing found. Try changing the <br />
+                    search or filter to find what you’re looking for.
+                </div>
+            </div>
+        </div>
+
+        <div
+                class="card-footer card-footer--end"
+                ng-if="!dataLoading && vm.items.length"
+        >
+            <dir-pagination-controls
+                    template-url="/app/shared/components/pagination/pagination.component.html"
+                    on-page-change="vm.onPageChange(newPageNumber)"
+            ></dir-pagination-controls>
+        </div>
+    </div>
+</div>
