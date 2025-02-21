@@ -22,6 +22,7 @@ import jakarta.mail.MessagingException;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     @Autowired
@@ -61,7 +62,7 @@ public class UserController {
                 SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.YEAR_FORMAT);
                 dateFormat.setLenient(false);
                 try {
-                    dob = dateFormat.parse(requestData.get("dob").toString());
+                    dob = dateFormat.parse(requestData.get(Constants.PARAM_DOB).toString());
                 } catch (ParseException e) {
                     return ResponseEntity.badRequest().body(Constants.DOB_FORMAT_ERROR);
                 }

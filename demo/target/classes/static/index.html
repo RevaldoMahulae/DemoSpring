@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="userApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="app.js"></script>
+    <script src="services/userService.js"></script>
+    <script src="components/userList/userListController.js"></script>
+    <script src="components/userDetails/userDetailsController.js"></script>
+</head>
+<body ng-controller="MainController as vm">
+    <nav>
+        <ul>
+            <li><a href="#" ng-click="vm.showPage('userList')">Daftar Pengguna</a></li>
+        </ul>
+    </nav>
+
+    <div ng-show="vm.currentPage === 'userList'">
+        <div ng-include="'components/userList/userList.html'"></div>
+    </div>
+
+  <!--  <div ng-show="vm.currentPage === 'userDetails'">
+        <div ng-include="'components/userDetails/userDetails.html'"></div>
+    </div> -->
+</body>
+</html>

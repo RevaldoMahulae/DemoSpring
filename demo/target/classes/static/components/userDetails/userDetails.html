@@ -1,0 +1,20 @@
+<div class="container" ng-controller="UserDetailsController as vm">
+    <h3>Detail Pengguna</h3>
+    <div ng-if="vm.user">
+        <p><strong>ID:</strong> {{ vm.user.id }}</p>
+        <p><strong>Nama:</strong> {{ vm.user.name }}</p>
+        <p><strong>Email:</strong> {{ vm.user.email }}</p>
+        <p><strong>NIK:</strong> {{ vm.user.nik }}</p>
+        <p><strong>Tanggal Lahir:</strong> {{ vm.user.dob }}</p>
+
+        <p><strong>Roles:</strong> 
+            <span ng-repeat="role in vm.roles">{{ role }}{{$last ? '' : ', '}}</span>
+        </p>
+
+        <p><strong>Divisions:</strong> 
+            <span ng-repeat="division in vm.divisions">{{ division }}{{$last ? '' : ', '}}</span>
+        </p>
+
+        <button ng-click="vm.closeDetails()">Tutup</button>
+    </div>
+</div>
