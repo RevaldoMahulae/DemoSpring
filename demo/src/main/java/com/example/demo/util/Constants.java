@@ -16,8 +16,8 @@ public class Constants {
     public static final String PARAM_NIK = "nik";
     public static final String PARAM_DOB = "dob";
     public static final String PARAM_USER_ID = "userId";
-    public static final String PARAM_ROLE_ID = "roleId";
-    public static final String PARAM_DIVISION_ID = "divisionId";
+    public static final String PARAM_ROLE_ID = "roleIds";
+    public static final String PARAM_DIVISION_ID = "divisionIds";
     public static final String PARAM_SORT_BY = "sortBy";
     public static final String PARAM_DIRECTION = "direction";
 
