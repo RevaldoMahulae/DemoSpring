@@ -10,11 +10,13 @@
     <script src="services/userService.js"></script>
     <script src="components/userList/userListController.js"></script>
     <script src="components/userDetails/userDetailsController.js"></script>
+    <script src="components/userCreate/userCreateController.js"></script>
 </head>
 <body ng-controller="MainController as vm">
     <nav>
         <ul>
             <li><a href="#" ng-click="vm.showPage('userList')">Daftar Pengguna</a></li>
+            <li><a href="#" ng-click="vm.showPage('userCreate')">Buat Pengguna</a></li>
         </ul>
     </nav>
 
@@ -22,8 +24,12 @@
         <div ng-include="'components/userList/userList.html'"></div>
     </div>
 
-  <!--  <div ng-show="vm.currentPage === 'userDetails'">
+    <div ng-show="vm.currentPage === 'userDetails'">
         <div ng-include="'components/userDetails/userDetails.html'"></div>
-    </div> -->
+    </div>
+
+    <div ng-show="vm.currentPage === 'userCreate'">
+        <div ng-include="'components/userCreate/userCreate.html'"></div>
+    </div>
 </body>
 </html>

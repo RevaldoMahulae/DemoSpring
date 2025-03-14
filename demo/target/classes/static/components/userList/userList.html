@@ -8,6 +8,7 @@
                 <th>Email</th>
                 <th>NIK</th>
                 <th>Tanggal Lahir</th>
+				<th>Detail</th>
             </tr>
         </thead>
         <tbody>
@@ -17,6 +18,9 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.nik }}</td>
                 <td>{{ user.dob }}</td>
+				<td>
+				    <a href="#" ng-click="vm.showUserDetails(user.id)" class="btn-detail">Lihat Detail</a>
+				</td>
             </tr>
         </tbody>
     </table>

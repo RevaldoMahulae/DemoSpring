@@ -16,8 +16,8 @@ public class Constants {
     public static final String PARAM_NIK = "nik";
     public static final String PARAM_DOB = "dob";
     public static final String PARAM_USER_ID = "userId";
-    public static final String PARAM_ROLE_ID = "roleId";
-    public static final String PARAM_DIVISION_ID = "divisionId";
+    public static final String PARAM_ROLE_ID = "roleIds";
+    public static final String PARAM_DIVISION_ID = "divisionIds";
     public static final String PARAM_SORT_BY = "sortBy";
     public static final String PARAM_DIRECTION = "direction";
 
@@ -30,7 +30,7 @@ public class Constants {
     public static final String DOB_FORMAT_ERROR = "Format tanggal lahir (dob) harus yyyy-MM-dd.";
     public static final String SAVE_USER_ERROR = "Gagal save User";
     public static final String EMAIL_SEND_ERROR = "User berhasil dibuat, tetapi email gagal dikirim.";
-    public static final String EMAIL_HRD = "email@qualitas.co.id";
+    public static final String EMAIL_HRD = "revaldo.mahulae@qualitas.co.id";
     public static final String EMAIL_SUBJECT_NEW_USER = "User Baru Telah Dibuat";
 
     public static final String QUERY_GET_ALL_USERS = "SELECT id, name, email, nik, dob FROM users WHERE is_deleted = false ORDER BY %s %s";

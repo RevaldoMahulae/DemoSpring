@@ -61,6 +61,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user, List<Long> roleIds, List<Long> divisionIds) {
+        if (user == null) {
+            throw new IllegalArgumentException("User object cannot be null");
+        }
+        if (user.getName() == null || user.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("User name cannot be null or empty");
+        }
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("User email cannot be null or empty");
+        }
+        if (roleIds == null || roleIds.isEmpty()) {
+            throw new IllegalArgumentException("User must have at least one role");
+        }
+        if (divisionIds == null || divisionIds.isEmpty()) {
+            throw new IllegalArgumentException("User must be assigned to at least one division");
+        }
+
         try {
             return userDao.saveUser(user, roleIds, divisionIds);
         } catch (DataAccessException e) {
@@ -71,14 +87,36 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+
     @Override
     public User updateUser(Long id, User updatedUser, List<Long> roleIds, List<Long> divisionIds) {
+        if (id == null) {
+            throw new IllegalArgumentException("User ID cannot be null");
+        }
+        if (updatedUser == null) {
+            throw new IllegalArgumentException("Updated user data cannot be null");
+        }
+        if (updatedUser.getName() == null || updatedUser.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("User name cannot be null or empty");
+        }
+        if (updatedUser.getEmail() == null || updatedUser.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("User email cannot be null or empty");
+        }
+        if (roleIds == null || roleIds.isEmpty()) {
+            throw new IllegalArgumentException("User must have at least one role");
+        }
+        if (divisionIds == null || divisionIds.isEmpty()) {
+            throw new IllegalArgumentException("User must be assigned to at least one division");
+        }
+
         User user = userDao.updateUser(id, updatedUser, roleIds, divisionIds);
         if (user == null) {
             throw new RuntimeException("User with ID " + id + " not found");
         }
         return user;
     }
+
 
     @Override
     public boolean deleteUser(Long id) {

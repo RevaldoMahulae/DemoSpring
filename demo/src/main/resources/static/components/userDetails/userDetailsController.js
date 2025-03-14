@@ -11,7 +11,7 @@ app.controller('UserDetailsController', function(UserService, $rootScope, $scope
         }
         
         console.log("Fetching details for User ID:", userId);
-        UserService.getUserByID(userId).then(function(response) {
+        UserService.getUserDetails(userId).then(function(response) {
             vm.user = response.data;
             console.log("User Details:", vm.user);
 

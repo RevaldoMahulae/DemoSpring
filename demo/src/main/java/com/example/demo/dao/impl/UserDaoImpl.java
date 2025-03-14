@@ -66,14 +66,14 @@ public class UserDaoImpl implements UserDao {
             for (Long roleId : roleIds) {
                 session.createNativeQuery(Constants.QUERY_INSERT_USER_ROLE)
                         .setParameter(Constants.PARAM_USER_ID, userId)
-                        .setParameter(Constants.PARAM_ROLE_ID, roleId)
+                        .setParameter("roleId", roleId)
                         .executeUpdate();
             }
 
             for (Long divisionId : divisionIds) {
                 session.createNativeQuery(Constants.QUERY_INSERT_USER_DIVISION)
                         .setParameter(Constants.PARAM_USER_ID, userId)
-                        .setParameter(Constants.PARAM_DIVISION_ID, divisionId)
+                        .setParameter("divisionId", divisionId)
                         .executeUpdate();
             }
 
@@ -104,7 +104,7 @@ public class UserDaoImpl implements UserDao {
             for (Long roleId : roleIds) {
                 session.createNativeQuery(Constants.QUERY_INSERT_USER_ROLE)
                         .setParameter(Constants.PARAM_USER_ID, id)
-                        .setParameter(Constants.PARAM_ROLE_ID, roleId)
+                        .setParameter("roleId", roleId)
                         .executeUpdate();
             }
 
@@ -115,7 +115,7 @@ public class UserDaoImpl implements UserDao {
             for (Long divisionId : divisionIds) {
                 session.createNativeQuery(Constants.QUERY_INSERT_USER_DIVISION)
                         .setParameter(Constants.PARAM_USER_ID, id)
-                        .setParameter(Constants.PARAM_DIVISION_ID, divisionId)
+                        .setParameter("divisionId", divisionId)
                         .executeUpdate();
             }
 

@@ -1,0 +1,31 @@
+<div class="container" ng-controller="UserCreateController as vm">
+    <h2>Buat Pengguna Baru</h2>
+    <form ng-submit="vm.createUser()">
+        <label for="name">Nama:</label>
+        <input type="text" id="name" ng-model="vm.user.name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" ng-model="vm.user.email" required>
+
+        <label for="nik">NIK:</label>
+        <input type="number" id="nik" ng-model="vm.user.nik" required>
+
+        <label for="dob">Tanggal Lahir (yyyy-MM-dd):</label>
+        <input type="date" id="dob" ng-model="vm.user.dob" required>
+
+        <label for="roles">Pilih Role:</label>
+        <select id="roles" ng-model="vm.user.roleIds" multiple>
+            <option ng-repeat="role in vm.availableRoles" value="{{role.id}}">{{role.name}}</option>
+        </select>
+
+        <label for="divisions">Pilih Division:</label>
+        <select id="divisions" ng-model="vm.user.divisionIds" multiple>
+            <option ng-repeat="division in vm.availableDivisions" value="{{division.id}}">{{division.name}}</option>
+        </select>
+
+        <button type="submit">Buat Pengguna</button>
+    </form>
+
+    <p ng-show="vm.successMessage">{{ vm.successMessage }}</p>
+    <p ng-show="vm.errorMessage" class="error">{{ vm.errorMessage }}</p>
+</div>

@@ -1,7 +1,6 @@
-app.controller('UserListController', function(UserService) {
+app.controller('UserListController', function(UserService, $rootScope) {
     var vm = this;
     vm.users = [];
-    vm.selectedUserId = null;
 
     vm.getUsers = function() {
         UserService.getAllUsers().then(function(response) {
@@ -9,6 +8,11 @@ app.controller('UserListController', function(UserService) {
         }).catch(function(error) {
             console.error('Error fetching user list:', error);
         });
+    };
+    
+    vm.showUserDetails = function(userId) {
+        $rootScope.selectedUserId = userId;
+        $rootScope.currentPage = 'userDetails';
     };
    
     vm.getUsers();
