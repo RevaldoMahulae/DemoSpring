@@ -9,6 +9,8 @@ public class Constants {
     public static final String API_GET_USER_ROLES = "/{id}/roles";
     public static final String API_GET_USER_DIVISIONS = "/{id}/divisions";
     public static final String API_RESTORE_USER = "/restore/{id}";
+    public static final String API_ROLE = "/role";
+    public static final String API_DIVISION = "/division";
 	
     public static final String PARAM_ID = "id";
     public static final String PARAM_NAME = "name";
@@ -43,6 +45,8 @@ public class Constants {
     public static final String QUERY_UPDATE_USER = "UPDATE users SET name = :name, email = :email, nik = :nik, dob = :dob WHERE id = :id";
     public static final String QUERY_SOFT_DELETE_USER = "UPDATE User SET isDeleted = true WHERE id = :id";
     public static final String QUERY_RESTORE_USER = "UPDATE User SET isDeleted = false WHERE id = :id";
+    public static final String QUERY_GET_ALL_ROLES = "SELECT id, role_name AS roleName FROM roles ORDER BY %s %s";
+    public static final String QUERY_GET_ALL_DIVISIONS = "SELECT id, division_name as divisionName FROM divisions ORDER BY %s %s";
     public static final String QUERY_GET_USER_ROLES = 
             "SELECT r.role_name FROM roles r " +
             "JOIN user_roles ur ON r.id = ur.role_id " +

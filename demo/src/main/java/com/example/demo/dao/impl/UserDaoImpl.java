@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.example.demo.dao.UserDao;
+import com.example.demo.model.Division;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.util.Constants;
 
@@ -14,10 +16,12 @@ import org.hibernate.Transaction;
 import org.hibernate.exception.DataException;
 import org.hibernate.query.NativeQuery;
 import org.hibernate.transform.Transformers;
+import org.hibernate.type.StandardBasicTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -176,5 +180,33 @@ public class UserDaoImpl implements UserDao {
             return updatedRows > 0;
         }
     }
+
+    @Override
+    public List<Role> getAllRoles(String sortBy, Direction direction) {
+        try (Session session = sessionFactory.openSession()) {
+            String queryString = String.format(Constants.QUERY_GET_ALL_ROLES, sortBy, direction.name());
+            NativeQuery<Role> sqlQuery = session.createNativeQuery(queryString)
+                    .addScalar("id", StandardBasicTypes.LONG)
+                    .addScalar("roleName", StandardBasicTypes.STRING)
+                    .setTupleTransformer(Transformers.aliasToBean(Role.class));
+            return sqlQuery.getResultList();
+        }
+    }
+
+
+    @Override
+    public List<Division> getAllDivisions(String sortBy, Direction direction) {
+        try (Session session = sessionFactory.openSession()) {
+            String queryString = String.format(Constants.QUERY_GET_ALL_DIVISIONS, sortBy, direction.name());
+            NativeQuery<Division> sqlQuery = session.createNativeQuery(queryString)
+                    .addScalar("id", StandardBasicTypes.LONG)
+                    .addScalar("divisionName", StandardBasicTypes.STRING)
+                    .setTupleTransformer(Transformers.aliasToBean(Division.class));
+            return sqlQuery.getResultList();
+        }
+    }
+
+    
+    
 
 }

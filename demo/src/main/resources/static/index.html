@@ -9,8 +9,9 @@
     <script src="app.js"></script>
     <script src="services/userService.js"></script>
     <script src="components/userList/userListController.js"></script>
-    <script src="components/userDetails/userDetailsController.js"></script>
+    <script src="components/userList/userDetailsController.js"></script>
     <script src="components/userCreate/userCreateController.js"></script>
+	<script src="components/userList/userEditController.js"></script>
 </head>
 <body ng-controller="MainController as vm">
     <nav>
@@ -22,10 +23,6 @@
 
     <div ng-show="vm.currentPage === 'userList'">
         <div ng-include="'components/userList/userList.html'"></div>
-    </div>
-
-    <div ng-show="vm.currentPage === 'userDetails'">
-        <div ng-include="'components/userDetails/userDetails.html'"></div>
     </div>
 
     <div ng-show="vm.currentPage === 'userCreate'">

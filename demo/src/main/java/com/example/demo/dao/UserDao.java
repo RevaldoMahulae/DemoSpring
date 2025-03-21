@@ -3,7 +3,10 @@ package com.example.demo.dao;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
+import com.example.demo.model.Division;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 
 public interface UserDao {
@@ -15,4 +18,6 @@ public interface UserDao {
     List<String> getUserRoles(Long userId);
     List<String> getUserDivisions(Long userId);
 	boolean restoreUser(Long id);
+	List<Role> getAllRoles(String sortBy, Direction direction);
+	List<Division> getAllDivisions(String sortBy, Direction direction);
 }

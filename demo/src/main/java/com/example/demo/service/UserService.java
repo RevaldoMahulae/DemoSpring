@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 
+import com.example.demo.model.Division;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.util.ResponseWrapper;
 import com.example.demo.model.User;
@@ -19,4 +22,6 @@ public interface UserService {
     List<String> getUserDivisions(Long userId);
 	Map<String, Object> getUserDetails(Long id);
 	boolean restoreUser(Long id);
+	List<Role> getAllRoles(String sortBy, Direction direction);
+	List<Division> getAllDivision(String sortBy, Direction direction);
 }

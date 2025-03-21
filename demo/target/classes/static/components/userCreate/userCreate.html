@@ -15,12 +15,12 @@
 
         <label for="roles">Pilih Role:</label>
         <select id="roles" ng-model="vm.user.roleIds" multiple>
-            <option ng-repeat="role in vm.availableRoles" value="{{role.id}}">{{role.name}}</option>
+            <option ng-repeat="role in vm.availableRoles" value="{{role.id}}">{{role.roleName}}</option>
         </select>
 
         <label for="divisions">Pilih Division:</label>
         <select id="divisions" ng-model="vm.user.divisionIds" multiple>
-            <option ng-repeat="division in vm.availableDivisions" value="{{division.id}}">{{division.name}}</option>
+            <option ng-repeat="division in vm.availableDivisions" value="{{division.id}}">{{division.divisionName}}</option>
         </select>
 
         <button type="submit">Buat Pengguna</button>

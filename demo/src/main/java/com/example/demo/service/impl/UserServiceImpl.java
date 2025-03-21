@@ -14,8 +14,11 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import com.example.demo.dao.UserDao;
+import com.example.demo.model.Division;
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 
 @Service
@@ -137,5 +140,17 @@ public class UserServiceImpl implements UserService {
     public boolean restoreUser(Long id) {
         return userDao.restoreUser(id);
     }
+
+	@Override
+	public List<Role> getAllRoles(String sortBy, Direction direction) {
+		return userDao.getAllRoles(sortBy, direction);
+	}
+
+	@Override
+	public List<Division> getAllDivision(String sortBy, Direction direction) {
+		return userDao.getAllDivisions(sortBy, direction);
+	}
+    
+    
 
 }

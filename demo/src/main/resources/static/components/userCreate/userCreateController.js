@@ -1,5 +1,7 @@
-app.controller('UserCreateController', function(UserService) {
+app.controller('UserCreateController', function(UserService, $http) {
     var vm = this;
+    vm.availableRoles = [];
+    vm.availableDivisions = [];
 
     vm.user = {
         name: '',
@@ -10,21 +12,21 @@ app.controller('UserCreateController', function(UserService) {
         divisionIds: []
     };
 
-    vm.availableRoles = [
-        { id: 1, name: 'Admin' },
-        { id: 2, name: 'User' },
-        { id: 3, name: 'Manager' },
-        { id: 4, name: 'Developer' },
-        { id: 5, name: 'QA Tester' }
-    ];
+    vm.getRoles = function() {
+        $http.get("http://localhost:9090/role").then(function(response) {
+            vm.availableRoles = response.data;
+        }).catch(function(error) {
+            console.error('Error fetching roles:', error);
+        });
+    };
 
-    vm.availableDivisions = [
-        { id: 1, name: 'IT' },
-        { id: 2, name: 'Finance' },
-        { id: 3, name: 'HR' },
-        { id: 4, name: 'Marketing' },
-        { id: 5, name: 'Operations' }
-    ];
+    vm.getDivisions = function() {
+        $http.get("http://localhost:9090/division").then(function(response) {
+            vm.availableDivisions = response.data;
+        }).catch(function(error) {
+            console.error('Error fetching divisions:', error);
+        });
+    };
 
     vm.createUser = function() {
         var requestData = {
@@ -40,6 +42,8 @@ app.controller('UserCreateController', function(UserService) {
             .then(function(response) {
                 vm.successMessage = 'User berhasil dibuat!';
                 vm.errorMessage = '';
+                vm.newUser = {};
+                window.location.reload();
             })
             .catch(function(error) {
                 vm.errorMessage = 'Gagal membuat user: ' + (error.data.message || error.statusText);
@@ -47,4 +51,7 @@ app.controller('UserCreateController', function(UserService) {
                 console.error('Error creating user:', error);
             });
     };
+    
+    vm.getRoles();
+    vm.getDivisions();
 });

@@ -8,7 +8,7 @@
                 <th>Email</th>
                 <th>NIK</th>
                 <th>Tanggal Lahir</th>
-				<th>Detail</th>
+                <th>Detail</th>
             </tr>
         </thead>
         <tbody>
@@ -18,10 +18,61 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.nik }}</td>
                 <td>{{ user.dob }}</td>
-				<td>
-				    <a href="#" ng-click="vm.showUserDetails(user.id)" class="btn-detail">Lihat Detail</a>
-				</td>
+                <td>
+                    <button ng-click="vm.showUserDetails(user.id)" class="btn-detail">Lihat Detail</button>
+                </td>
             </tr>
         </tbody>
     </table>
+
+    <div class="modal" ng-show="vm.showModal">
+        <div class="modal-content" ng-controller="UserDetailsController as detailsVm">
+            <span class="close" ng-click="vm.closeModal()">&times;</span>
+            <h3>Detail Pengguna</h3>
+            <p><strong>ID:</strong> {{ detailsVm.user.id }}</p>
+            <p><strong>Nama:</strong> {{ detailsVm.user.name }}</p>
+            <p><strong>Email:</strong> {{ detailsVm.user.email }}</p>
+            <p><strong>NIK:</strong> {{ detailsVm.user.nik }}</p>
+            <p><strong>Tanggal Lahir:</strong> {{ detailsVm.user.dob }}</p>
+            <p><strong>Role:</strong> {{ detailsVm.roles.join(', ') }}</p>
+            <p><strong>Divisi:</strong> {{ detailsVm.divisions.join(', ') }}</p>
+
+            <button ng-click="vm.editUser(detailsVm.user.id)" class="btn-edit">Edit</button>
+			<button ng-click="vm.deleteUser(detailsVm.user.id)" class="btn-delete">Hapus</button>
+            <button ng-click="vm.closeModal()">Tutup</button>
+        </div>
+    </div>
+
+	<div class="modal" ng-show="vm.showEditModal">
+	    <div class="modal-content" ng-controller="UserEditController as editVm">
+	        <span class="close" ng-click="vm.closeEditModal()">&times;</span>
+	        <h3>Edit Pengguna</h3>
+	        <form ng-submit="editVm.updateUser()">
+	            <label>Nama:</label>
+	            <input type="text" ng-model="editVm.user.name" required>
+
+	            <label>Email:</label>
+	            <input type="email" ng-model="editVm.user.email" required>
+
+	            <label>NIK:</label>
+	            <input type="number" ng-model="editVm.user.nik" required>
+
+	            <label>Tanggal Lahir:</label>
+	            <input type="date" ng-model="editVm.user.dob" required>
+
+	            <label>Role:</label>
+	            <select ng-model="editVm.user.roleIds" multiple>
+	                <option ng-repeat="role in editVm.availableRoles" value="{{role.id}}">{{role.roleName}}</option>
+	            </select>
+
+	            <label>Divisi:</label>
+	            <select ng-model="editVm.user.divisionIds" multiple>
+	                <option ng-repeat="division in editVm.availableDivisions" value="{{division.id}}">{{division.divisionName}}</option>
+	            </select>
+
+	            <button type="submit">Update User</button>
+	            <button type="button" ng-click="vm.closeEditModal()">Batal</button>
+	        </form>
+	    </div>
+	</div>
 </div>

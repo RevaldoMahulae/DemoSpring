@@ -165,7 +165,9 @@ public class UserController {
         if (!isDeleted) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok("User with ID " + id + " deleted successfully");
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "User with ID " + id + " deleted successfully");
+        return ResponseEntity.ok(response);
     }
     
     @PutMapping(Constants.API_RESTORE_USER)
@@ -176,5 +178,4 @@ public class UserController {
         }
         return ResponseEntity.ok("User with ID " + id + " restored successfully");
     }
-
 }

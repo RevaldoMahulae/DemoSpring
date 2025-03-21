@@ -8,6 +8,8 @@ public class Division {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
+    @Column(name = "division_name")
     private String divisionName;
 
     public Division() {}
