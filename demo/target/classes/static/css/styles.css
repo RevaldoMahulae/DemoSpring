@@ -28,7 +28,7 @@ nav ul li a {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     background: white;
     padding: 20px;
     margin: 20px auto;
@@ -45,7 +45,7 @@ label {
     margin-top: 10px;
 }
 
-input {
+input, select {
     width: 100%;
     padding: 8px;
     margin-top: 5px;
@@ -62,6 +62,7 @@ button {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    transition: background 0.3s ease;
 }
 
 button:hover {
@@ -95,18 +96,44 @@ th {
     color: white;
 }
 
-.btn-detail, .btn-back {
+.btn-detail, .btn-edit, .btn-delete {
     display: inline-block;
     padding: 8px 12px;
-    margin: 10px 0;
-    background-color: #3498db;
-    color: white;
-    text-decoration: none;
+    margin: 5px 2px;
+    border: none;
     border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s ease;
 }
 
-.btn-detail:hover, .btn-back:hover {
+.btn-detail {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-detail:hover {
     background-color: #2980b9;
+}
+
+.btn-edit {
+    background-color: #f1c40f;
+    color: black;
+}
+
+.btn-edit:hover {
+    background-color: #d4ac0d;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.btn-delete:hover {
+    background-color: #c0392b;
 }
 
 .user-details {
@@ -144,4 +171,61 @@ th {
     font-size: 24px;
     cursor: pointer;
 }
+
+.dropdown-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.dropdown-toggle {
+    width: 100%;
+    padding: 10px;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.dropdown-toggle:hover {
+    background: #f0f0f0;
+}
+
+.dropdown-menu {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-top: 5px;
+    padding: 5px 0;
+    max-height: 200px;
+    overflow-y: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    z-index: 10;
+}
+
+.dropdown-menu li {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+    background: #f0f0f0;
+}
+
+.dropdown-menu input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.search-box {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
 

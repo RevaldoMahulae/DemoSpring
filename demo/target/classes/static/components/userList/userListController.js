@@ -4,6 +4,7 @@ app.controller('UserListController', function(UserService, $rootScope) {
     vm.showModal = false;
     vm.showEditModal = false;
     vm.selectedUser = {};
+    vm.searchQuery = '';
 
     vm.getUsers = function() {
         UserService.getAllUsers().then(function(response) {
@@ -12,6 +13,18 @@ app.controller('UserListController', function(UserService, $rootScope) {
             console.error('Error fetching user list:', error);
         });
     };
+    
+    vm.searchFilter = function(user) {
+    if (!vm.searchQuery) return true; 
+
+    var query = vm.searchQuery.toLowerCase();
+
+    return (
+        user.name.toLowerCase().includes(query) ||
+        user.email.toLowerCase().includes(query) ||
+        user.nik.toString().includes(query)
+    );
+};
 
     vm.showUserDetails = function(userId) {
         $rootScope.selectedUserId = userId;

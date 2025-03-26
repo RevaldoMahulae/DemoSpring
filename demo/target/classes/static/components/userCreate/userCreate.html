@@ -13,19 +13,39 @@
         <label for="dob">Tanggal Lahir (yyyy-MM-dd):</label>
         <input type="date" id="dob" ng-model="vm.user.dob" required>
 
-        <label for="roles">Pilih Role:</label>
-        <select id="roles" ng-model="vm.user.roleIds" multiple>
-            <option ng-repeat="role in vm.availableRoles" value="{{role.id}}">{{role.roleName}}</option>
-        </select>
-
-        <label for="divisions">Pilih Division:</label>
-        <select id="divisions" ng-model="vm.user.divisionIds" multiple>
-            <option ng-repeat="division in vm.availableDivisions" value="{{division.id}}">{{division.divisionName}}</option>
-        </select>
+        <label>Pilih Role:</label>
+        <div class="dropdown-container">
+            <div class="dropdown-toggle" ng-click="vm.showRoles = !vm.showRoles">
+                <span ng-if="vm.user.roleIds.length === 0">Pilih Role</span>
+                <span ng-if="vm.user.roleIds.length > 0">{{ vm.getSelectedRoles() }}</span>
+            </div>
+            <ul class="dropdown-menu" ng-show="vm.showRoles">
+                <li ng-repeat="role in vm.availableRoles" 
+                    ng-click="vm.toggleSelection(role.id, 'roleIds')">
+                    <input type="checkbox" ng-checked="vm.user.roleIds.includes(role.id)">
+                    {{ role.roleName }}
+                </li>
+            </ul>
+        </div>
+		
+        <label>Pilih Division:</label>
+        <div class="dropdown-container">
+            <div class="dropdown-toggle" ng-click="vm.showDivisions = !vm.showDivisions">
+                <span ng-if="vm.user.divisionIds.length === 0">Pilih Division</span>
+                <span ng-if="vm.user.divisionIds.length > 0">{{ vm.getSelectedDivisions() }}</span>
+            </div>
+            <ul class="dropdown-menu" ng-show="vm.showDivisions">
+                <li ng-repeat="division in vm.availableDivisions" 
+                    ng-click="vm.toggleSelection(division.id, 'divisionIds')">
+                    <input type="checkbox" ng-checked="vm.user.divisionIds.includes(division.id)">
+                    {{ division.divisionName }}
+                </li>
+            </ul>
+        </div>
 
         <button type="submit">Buat Pengguna</button>
     </form>
 
-    <p ng-show="vm.successMessage">{{ vm.successMessage }}</p>
-    <p ng-show="vm.errorMessage" class="error">{{ vm.errorMessage }}</p>
+    <p ng-show="vm.successMessage" class="success-message">{{ vm.successMessage }}</p>
+    <p ng-show="vm.errorMessage" class="error-message">{{ vm.errorMessage }}</p>
 </div>
