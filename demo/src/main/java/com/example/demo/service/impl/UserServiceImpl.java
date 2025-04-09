@@ -150,6 +150,11 @@ public class UserServiceImpl implements UserService {
 	public List<Division> getAllDivision(String sortBy, Direction direction) {
 		return userDao.getAllDivisions(sortBy, direction);
 	}
+
+	@Override
+	public List<User> searchUsers(String keyword) {
+		return userDao.searchUsers(keyword);
+	}
     
     
 

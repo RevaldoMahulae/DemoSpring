@@ -1,16 +1,14 @@
-app.controller('UserEditController', function(UserService, $rootScope, $scope, $http) {
+app.controller('UserEditController', function(UserService, $rootScope, $scope, $http, $timeout) {
     var vm = this;
     vm.user = { roleIds: [], divisionIds: [] };
     vm.availableRoles = [];
     vm.availableDivisions = [];
 
-    vm.showRoles = false;
-    vm.showDivisions = false;
-
     vm.getRoles = function() {
         $http.get("http://localhost:9090/role")
             .then(function(response) {
                 vm.availableRoles = response.data;
+                vm.initTomSelect("#role-select", vm.user.roleIds, vm.availableRoles);
             })
             .catch(function(error) {
                 console.error('Error fetching roles:', error);
@@ -21,21 +19,12 @@ app.controller('UserEditController', function(UserService, $rootScope, $scope, $
         $http.get("http://localhost:9090/division")
             .then(function(response) {
                 vm.availableDivisions = response.data;
+                vm.initTomSelect("#division-select", vm.user.divisionIds, vm.availableDivisions);
             })
             .catch(function(error) {
                 console.error('Error fetching divisions:', error);
             });
     };
-
-    vm.toggleSelection = function(id, type) {
-        var index = vm.user[type].indexOf(id);
-        if (index > -1) {
-            vm.user[type].splice(index, 1);
-        } else {
-            vm.user[type].push(id);
-        }
-    };
-
 
     vm.getUserById = function(userId) {
         UserService.getUserDetails(userId).then(function(response) {
@@ -45,64 +34,55 @@ app.controller('UserEditController', function(UserService, $rootScope, $scope, $
                 vm.user.dob = new Date(vm.user.dob);
             }
 
+            // Konversi role dan division dari string ke array ID
+            vm.user.roleIds = vm.convertNamesToIds(vm.user.role, vm.availableRoles, 'roleName');
+            vm.user.divisionIds = vm.convertNamesToIds(vm.user.division, vm.availableDivisions, 'divisionName');
 
-	            vm.user.roleIds = vm.user.role
-	                ? vm.user.role.split(',').map(roleName => {
-	                    let role = vm.availableRoles.find(r => r.roleName === roleName.trim());
-	                    return role ? role.id : null;
-	                }).filter(id => id !== null)
-	                : [];
-	
-	            vm.user.divisionIds = vm.user.division
-	                ? vm.user.division.split(',').map(divisionName => {
-	                    let division = vm.availableDivisions.find(d => d.divisionName === divisionName.trim());
-	                    return division ? division.id : null;
-	                }).filter(id => id !== null)
-	                : [];	            
-	        
-            vm.mapSelectedRoles();
-            vm.mapSelectedDivisions();
-            
-
+            // Inisialisasi Tom Select setelah data user dimuat
+            $timeout(function() {
+                vm.initTomSelect("#role-select", vm.user.roleIds, vm.availableRoles);
+                vm.initTomSelect("#division-select", vm.user.divisionIds, vm.availableDivisions);
+            });
 
         }).catch(function(error) {
             console.error('Error fetching user details:', error);
         });
     };
 
-    vm.mapSelectedRoles = function() {
-        if (vm.availableRoles.length > 0 && vm.user.roleIds.length > 0) {
-            vm.user.roleIds = vm.availableRoles
-                .filter(role => vm.user.roleIds.includes(role.id))
-                .map(role => role.id);
-        }
+    vm.convertNamesToIds = function(nameString, availableList, key) {
+        if (!nameString) return [];
+        return nameString.split(',').map(name => {
+            let item = availableList.find(item => item[key] === name.trim());
+            return item ? item.id : null;
+        }).filter(id => id !== null);
     };
 
-    vm.mapSelectedDivisions = function() {
-        if (vm.availableDivisions.length > 0 && vm.user.divisionIds.length > 0) {
-            vm.user.divisionIds = vm.availableDivisions
-                .filter(division => vm.user.divisionIds.includes(division.id))
-                .map(division => division.id);
-        }
-    };
-    
-    vm.getSelectedRoles = function() {
-        return vm.availableRoles
-            .filter(role => vm.user.roleIds.includes(role.id))
-            .map(role => role.roleName)
-            .join(', ');
-    };
+    vm.initTomSelect = function(selector, model, availableOptions) {
+        var element = document.querySelector(selector);
+        if (!element) return;
 
-    vm.getSelectedDivisions = function() {
-        return vm.availableDivisions
-            .filter(division => vm.user.divisionIds.includes(division.id))
-            .map(division => division.divisionName)
-            .join(', ');
+        if (element.tomselect) {
+            element.tomselect.destroy();
+        }
+
+        var tomSelectInstance = new TomSelect(element, {
+            plugins: ['remove_button'],
+            persist: false,
+            create: false,
+            options: availableOptions.map(option => ({ value: String(option.id), text: option.roleName || option.divisionName })),
+            onChange: function(value) {
+                $scope.$apply(function() {
+                    model.length = 0;
+                    model.push(...value.map(Number));
+                });
+            }
+        });
+
+        tomSelectInstance.setValue(model.map(String));
     };
 
     vm.updateUser = function() {
         var userId = $rootScope.selectedUserId;
-        
         if (!userId) {
             alert("User ID tidak ditemukan!");
             return;
@@ -112,22 +92,20 @@ app.controller('UserEditController', function(UserService, $rootScope, $scope, $
             name: vm.user.name,
             email: vm.user.email,
             nik: parseInt(vm.user.nik, 10),
-            dob: vm.user.dob ? vm.user.dob.toISOString().split('T')[0] : null, 
-            roleIds: Array.isArray(vm.user.roleIds) ? vm.user.roleIds.map(Number) : [],
-            divisionIds: Array.isArray(vm.user.divisionIds) ? vm.user.divisionIds.map(Number) : []
+            dob: vm.user.dob ? vm.user.dob.toISOString().split('T')[0] : null,
+            roleIds: vm.user.roleIds.map(Number),
+            divisionIds: vm.user.divisionIds.map(Number)
         };
 
         UserService.updateUser(userId, requestData).then(function(response) {
             alert("User berhasil diperbarui!");
             $rootScope.$emit('userUpdated');
-            vm.showEditModal = false;
         }).catch(function(error) {
             alert("Gagal memperbarui user!");
             console.error('Error updating user:', error);
         });
     };
 
-    // Update user ID yang dipilih
     $scope.$watch(function() {
         return $rootScope.selectedUserId;
     }, function(newUserId) {

@@ -20,4 +20,5 @@ public interface UserDao {
 	boolean restoreUser(Long id);
 	List<Role> getAllRoles(String sortBy, Direction direction);
 	List<Division> getAllDivisions(String sortBy, Direction direction);
+	List<User> searchUsers(String keyword);
 }

@@ -178,4 +178,10 @@ public class UserController {
         }
         return ResponseEntity.ok("User with ID " + id + " restored successfully");
     }
+    
+    @GetMapping("/search")
+    public ResponseEntity<List<User>> searchUsers(@RequestParam String keyword) {
+        List<User> users = userService.searchUsers(keyword);
+        return ResponseEntity.ok(users);
+    }
 }

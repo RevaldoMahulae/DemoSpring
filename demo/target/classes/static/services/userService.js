@@ -22,4 +22,8 @@ app.service('UserService', function($http) {
     this.deleteUser = function(userId) {
         return $http.delete(API_URL + "/delete/" + userId);
     };
+    
+    this.searchUsers = function(keyword) {
+        return $http.get('http://localhost:9090/users/search', { params: { keyword: keyword } });
+    };
 });

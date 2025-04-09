@@ -14,17 +14,26 @@ app.controller('UserListController', function(UserService, $rootScope) {
         });
     };
     
+    /*
     vm.searchFilter = function(user) {
-    if (!vm.searchQuery) return true; 
-
-    var query = vm.searchQuery.toLowerCase();
-
-    return (
-        user.name.toLowerCase().includes(query) ||
-        user.email.toLowerCase().includes(query) ||
-        user.nik.toString().includes(query)
-    );
-};
+	    if (!vm.searchQuery) return true; 
+	
+	    var query = vm.searchQuery.toLowerCase();
+	
+	    return (
+	        user.name.toLowerCase().includes(query) ||
+	        user.email.toLowerCase().includes(query) ||
+	        user.nik.toString().includes(query)
+	    );
+	}; */
+	
+	vm.searchUsers = function() {
+        UserService.searchUsers(vm.searchKeyword).then(function(response) {
+            vm.users = response.data;
+        }).catch(function(error) {
+            console.error("Error fetching search results:", error);
+        });
+    };
 
     vm.showUserDetails = function(userId) {
         $rootScope.selectedUserId = userId;

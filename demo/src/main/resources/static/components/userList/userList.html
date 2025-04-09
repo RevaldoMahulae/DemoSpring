@@ -1,7 +1,8 @@
 <div class="container" ng-controller="UserListController as vm">
 	<h2>Daftar Pengguna</h2>
 	
-	<input type="text" ng-model="vm.searchQuery" placeholder="Cari Nama, Email, atau NIK" class="search-box">
+	<input type="text" ng-model="vm.searchKeyword" placeholder="Cari User..." />
+	<button ng-click="vm.searchUsers()">Search</button>
 	
 	<table>
 	    <thead>
@@ -17,7 +18,7 @@
 	        </tr>
 	    </thead>
 	    <tbody>
-	        <tr ng-repeat="user in vm.users | filter:vm.searchFilter">
+	        <tr ng-repeat="user in vm.users">
 	            <td>{{ user.id }}</td>
 	            <td>{{ user.name }}</td>
 	            <td>{{ user.email }}</td>
@@ -72,36 +73,18 @@
 	            <input type="date" ng-model="editVm.user.dob" required>
 
 				<label>Pilih Role:</label>
-				<div class="dropdown-container">
-				    <div class="dropdown-toggle" ng-click="editVm.showRoles = !editVm.showRoles">
-				        <span ng-if="editVm.user.role.length === 0">Pilih Role</span>
-				        <span ng-if="editVm.user.role.length > 0 && !editVm.getSelectedRoles()">{{ editVm.user.role }}</span>
-						<span ng-if="editVm.getSelectedRoles()">{{ editVm.getSelectedRoles() }}</span>
-				    </div>
-				    <ul class="dropdown-menu" ng-show="editVm.showRoles">
-				        <li ng-repeat="role in editVm.availableRoles" 
-				            ng-click="editVm.toggleSelection(role.id, 'roleIds')">
-				            <input type="checkbox" ng-checked="editVm.user.roleIds.includes(role.id)">
-				            {{ role.roleName }}
-				        </li>
-				    </ul>
-				</div>
+				<select id="role-select" multiple ng-model="editVm.user.roleIds" class="tom-select">
+				    <option ng-repeat="role in editVm.availableRoles" value="{{role.id}}">
+				        {{ role.roleName }}
+				    </option>
+				</select>
 
 				<label>Pilih Division:</label>
-				<div class="dropdown-container">
-				    <div class="dropdown-toggle" ng-click="editVm.showDivisions = !editVm.showDivisions">
-				        <span ng-if="editVm.user.division.length === 0">Pilih Division</span>
-				        <span ng-if="editVm.user.division.length > 0 && !editVm.getSelectedDivisions()">{{ editVm.user.division }}</span>
-						<span ng-if="editVm.getSelectedDivisions()">{{ editVm.getSelectedDivisions() }}</span>
-				    </div>
-				    <ul class="dropdown-menu" ng-show="editVm.showDivisions">
-				        <li ng-repeat="division in editVm.availableDivisions" 
-				            ng-click="editVm.toggleSelection(division.id, 'divisionIds')">
-				            <input type="checkbox" ng-checked="editVm.user.divisionIds.includes(division.id)">
-				            {{ division.divisionName }}
-				        </li>
-				    </ul>
-				</div>
+				<select id="division-select" multiple ng-model="editVm.user.divisionIds" class="tom-select">
+				    <option ng-repeat="division in editVm.availableDivisions" value="{{division.id}}">
+				        {{ division.divisionName }}
+				    </option>
+				</select>
 
 	            <button type="submit">Update User</button>
 	            <button type="button" ng-click="vm.closeEditModal()">Batal</button>
