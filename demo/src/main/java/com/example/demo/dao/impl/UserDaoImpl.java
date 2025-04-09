@@ -209,13 +209,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> searchUsers(String keyword) {
         try (Session session = sessionFactory.openSession()) {
-            String sql = "SELECT u.id, u.name, u.email, u.nik, u.dob " +
-                         "FROM users u " +
-                         "WHERE LOWER(u.name) LIKE LOWER(:keyword) " +
-                         "OR LOWER(u.email) LIKE LOWER(:keyword) " +
-                         "OR CAST(u.nik AS TEXT) LIKE :keyword " +
-                         "AND is_deleted = false " +
-                         "ORDER BY u.id ASC";
+        	String sql = "SELECT u.id, u.name, u.email, u.nik, u.dob " +
+                    "FROM users u " +
+                    "WHERE (LOWER(u.name) LIKE LOWER(:keyword) " +
+                    "OR LOWER(u.email) LIKE LOWER(:keyword) " +
+                    "OR CAST(u.nik AS TEXT) LIKE :keyword) " +
+                    "AND u.is_deleted = false " +
+                    "ORDER BY u.id ASC";
 
             NativeQuery<User> sqlQuery = session.createNativeQuery(sql)
                     .addScalar("id", StandardBasicTypes.LONG)

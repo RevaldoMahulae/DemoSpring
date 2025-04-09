@@ -1,8 +1,9 @@
-app.controller('UserCreateController', function(UserService, $http) {
+app.controller('UserCreateController', function(UserService, $http, $timeout) {
     var vm = this;
+
     vm.availableRoles = [];
     vm.availableDivisions = [];
-    
+
     vm.user = {
         name: '',
         email: '',
@@ -12,50 +13,45 @@ app.controller('UserCreateController', function(UserService, $http) {
         divisionIds: []
     };
 
-    vm.showRoles = false;
-    vm.showDivisions = false;
-
+    // Fetch roles and initialize Tom Select
     vm.getRoles = function() {
         $http.get("http://localhost:9090/role")
             .then(function(response) {
                 vm.availableRoles = response.data;
+                $timeout(initTomSelectRoles, 100); // Tunggu DOM selesai render
             })
             .catch(function(error) {
                 console.error('Error fetching roles:', error);
             });
     };
 
+    // Fetch divisions and initialize Tom Select
     vm.getDivisions = function() {
         $http.get("http://localhost:9090/division")
             .then(function(response) {
                 vm.availableDivisions = response.data;
+                $timeout(initTomSelectDivisions, 100); // Tunggu DOM selesai render
             })
             .catch(function(error) {
                 console.error('Error fetching divisions:', error);
             });
     };
 
-    vm.toggleSelection = function(id, type) {
-        var index = vm.user[type].indexOf(id);
-        if (index > -1) {
-            vm.user[type].splice(index, 1); 
-        } else {
-            vm.user[type].push(id); 
-        }
-    };
-    vm.getSelectedRoles = function() {
-        return vm.availableRoles
-            .filter(role => vm.user.roleIds.includes(role.id))
-            .map(role => role.roleName)
-            .join(', ');
-    };
+    function initTomSelectRoles() {
+        new TomSelect("#roles", {
+            plugins: ['remove_button'],
+            persist: false,
+            create: false
+        });
+    }
 
-    vm.getSelectedDivisions = function() {
-        return vm.availableDivisions
-            .filter(division => vm.user.divisionIds.includes(division.id))
-            .map(division => division.divisionName)
-            .join(', ');
-    };
+    function initTomSelectDivisions() {
+        new TomSelect("#divisions", {
+            plugins: ['remove_button'],
+            persist: false,
+            create: false
+        });
+    }
 
     vm.createUser = function() {
         var requestData = {
