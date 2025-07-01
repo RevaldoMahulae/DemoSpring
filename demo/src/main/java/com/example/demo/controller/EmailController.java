@@ -11,9 +11,9 @@ public class EmailController {
     @Autowired
     private EmailService emailService;
 
-    @PostMapping("/send")
-    public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String body) {
-        emailService.sendEmail(to, subject, body);
-        return "Email sent to " + to;
-    }
+//    @PostMapping("/send")
+//    public String sendEmail(@RequestParam String to, @RequestParam String subject, @RequestParam String body) {
+//        emailService.sendUserCreationEmail(to, subject, body);
+//        return "Email sent to " + to;
+//    }
 }

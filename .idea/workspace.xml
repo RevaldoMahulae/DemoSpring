@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="d352bbc8-77a9-44fa-8ef7-e459b3bf26c1" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/EmailController.java" beforeDir="false" afterPath="$PROJECT_DIR$/demo/src/main/java/com/example/demo/controller/EmailController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/META-INF/maven/com.example/demo/pom.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/classes/META-INF/maven/com.example/demo/pom.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/demo/target/test-classes/com/example/demo/DemoApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,6 +122,7 @@
       <workItem from="1738662084513" duration="2313000" />
       <workItem from="1738688683639" duration="1934000" />
       <workItem from="1738718677127" duration="2623000" />
+      <workItem from="1751338889668" duration="1358000" />
     </task>
     <servers />
   </component>
